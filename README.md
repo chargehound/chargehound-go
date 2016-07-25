@@ -4,7 +4,7 @@
 
 ## Installation
 
-`go get -u github.com/chargehound/chargehound-go`
+`go get github.com/chargehound/chargehound-go`
 
 This library currently requires go >= 1.6.
 
