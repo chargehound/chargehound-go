@@ -22,7 +22,7 @@ disputes, err := ch.Disputes.List()
 
 [Disputes](https://www.chargehound.com/docs/api/index.html?go#disputes)
 
-[Errors](https://test.chargehound.com/docs/api/index.html?go#errors)
+[Errors](https://www.chargehound.com/docs/api/index.html?go#errors)
 
 ## Development
 
