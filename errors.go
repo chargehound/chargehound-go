@@ -8,12 +8,12 @@ import (
 type ErrorType string
 
 const (
-	BadRequest   = ErrorType("Bad Request")
-	Unauthorized = ErrorType("Unauthorized")
-	Forbidden    = ErrorType("Forbidden")
-	NotFound     = ErrorType("Not Found")
-	ServerError  = ErrorType("Server Error")
-	GenericError = ErrorType("Error")
+	BadRequestError     = ErrorType("Bad Request")
+	UnauthorizedError   = ErrorType("Unauthorized")
+	ForbiddenError      = ErrorType("Forbidden")
+	NotFoundError       = ErrorType("Not Found")
+	InternalServerError = ErrorType("Server Error")
+	GenericError        = ErrorType("Error")
 )
 
 type Error interface {
@@ -44,15 +44,15 @@ func responseToError(res *http.Response) error {
 
 	switch errRes.Error.Status {
 	case 400:
-		errRes.Error.ErrorType = BadRequest
+		errRes.Error.ErrorType = BadRequestError
 	case 401:
-		errRes.Error.ErrorType = Unauthorized
+		errRes.Error.ErrorType = UnauthorizedError
 	case 403:
-		errRes.Error.ErrorType = Forbidden
+		errRes.Error.ErrorType = ForbiddenError
 	case 404:
-		errRes.Error.ErrorType = NotFound
+		errRes.Error.ErrorType = NotFoundError
 	case 500:
-		errRes.Error.ErrorType = ServerError
+		errRes.Error.ErrorType = InternalServerError
 	default:
 		errRes.Error.ErrorType = GenericError
 	}

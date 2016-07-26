@@ -18,31 +18,31 @@ var errorTests = []struct {
 	{
 		"{\"error\": { \"status\": 404, \"message\": \"A dispute with id 'puppy' was not found\"}}",
 		404,
-		chargehound.NotFound,
+		chargehound.NotFoundError,
 		"Not Found: A dispute with id 'puppy' was not found",
 	},
 	{
 		"{\"error\": { \"status\": 400, \"message\": \"Wrong param\"}}",
 		400,
-		chargehound.BadRequest,
+		chargehound.BadRequestError,
 		"Bad Request: Wrong param",
 	},
 	{
 		"{\"error\": { \"status\": 401, \"message\": \"No user\"}}",
 		401,
-		chargehound.Unauthorized,
+		chargehound.UnauthorizedError,
 		"Unauthorized: No user",
 	},
 	{
 		"{\"error\": { \"status\": 403, \"message\": \"Wrong user\"}}",
 		403,
-		chargehound.Forbidden,
+		chargehound.ForbiddenError,
 		"Forbidden: Wrong user",
 	},
 	{
 		"{\"error\": { \"status\": 500, \"message\": \"Server error\"}}",
 		500,
-		chargehound.ServerError,
+		chargehound.InternalServerError,
 		"Server Error: Server error",
 	},
 }
