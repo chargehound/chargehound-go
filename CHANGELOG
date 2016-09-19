@@ -3,3 +3,6 @@
 
 1.1.0 Sept 19, 2016
   - Add `AccountID` and `Force` parameters to structs.
+
+2.0.0 Sept 19, 2016
+  - Remove `CustomerName` and `CustomerEmail` parameters from structs.
