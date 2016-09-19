@@ -90,6 +90,8 @@ type ListDisputesParams struct {
 type UpdateDisputeParams struct {
 	// The dispute id.
 	ID            string
+	AccountID     string
+	Force         bool
 	TemplateID    string
 	Fields        map[string]interface{}
 	Products      []Product
@@ -101,6 +103,8 @@ type UpdateDisputeParams struct {
 
 type updateDisputeBody struct {
 	TemplateID    string                 `json:"template_id,omitempty"`
+	AccountID     string                 `json:"account_id,omitempty"`
+	Force         bool                   `json:"force,omitempty"`
 	Fields        map[string]interface{} `json:"fields,omitempty"`
 	Products      []Product              `json:"products,omitempty"`
 	CustomerName  string                 `json:"customer_name,omitempty"`
@@ -168,6 +172,8 @@ func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 		Fields:        params.Fields,
 		Products:      params.Products,
 		TemplateID:    params.TemplateID,
+		AccountID:     params.AccountID,
+		Force:         params.Force,
 	}
 
 	b := new(bytes.Buffer)

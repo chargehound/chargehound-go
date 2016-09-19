@@ -321,3 +321,95 @@ func TestUpdateDisputeCustomerInfo(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestUpdateDisputeAccountID(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "PUT" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["account_id"] != "acct_xxx" {
+			t.Error("Incorrect account id.")
+		}
+
+		if _, ok := b["force"]; ok {
+			t.Error("Sending force param erroneously.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
+		ID:        "dp_xxx",
+		AccountID: "acct_xxx",
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestUpdateDisputeForce(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx/submit" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["force"] != true {
+			t.Error("Incorrect force parameter.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Submit(&chargehound.UpdateDisputeParams{
+		ID:    "dp_xxx",
+		Force: true,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}

@@ -1,2 +1,5 @@
 1.0.0 July, 2016
   - Initial release with disputes API and dispute products
+
+1.1.0 Sept 19, 2016
+  - Add `AccountID` and `Force` parameters to structs.
