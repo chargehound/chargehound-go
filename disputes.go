@@ -89,26 +89,22 @@ type ListDisputesParams struct {
 // Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/index.html#updating-a-dispute.
 type UpdateDisputeParams struct {
 	// The dispute id.
-	ID            string
-	AccountID     string
-	Force         bool
-	TemplateID    string
-	Fields        map[string]interface{}
-	Products      []Product
-	CustomerName  string
-	CustomerEmail string
+	ID         string
+	AccountID  string
+	Force      bool
+	TemplateID string
+	Fields     map[string]interface{}
+	Products   []Product
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
 
 type updateDisputeBody struct {
-	TemplateID    string                 `json:"template_id,omitempty"`
-	AccountID     string                 `json:"account_id,omitempty"`
-	Force         bool                   `json:"force,omitempty"`
-	Fields        map[string]interface{} `json:"fields,omitempty"`
-	Products      []Product              `json:"products,omitempty"`
-	CustomerName  string                 `json:"customer_name,omitempty"`
-	CustomerEmail string                 `json:"customer_email,omitempty"`
+	TemplateID string                 `json:"template_id,omitempty"`
+	AccountID  string                 `json:"account_id,omitempty"`
+	Force      bool                   `json:"force,omitempty"`
+	Fields     map[string]interface{} `json:"fields,omitempty"`
+	Products   []Product              `json:"products,omitempty"`
 }
 
 // Retrieve a single disputes.
@@ -167,13 +163,11 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 
 func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 	body := updateDisputeBody{
-		CustomerEmail: params.CustomerEmail,
-		CustomerName:  params.CustomerName,
-		Fields:        params.Fields,
-		Products:      params.Products,
-		TemplateID:    params.TemplateID,
-		AccountID:     params.AccountID,
-		Force:         params.Force,
+		Fields:     params.Fields,
+		Products:   params.Products,
+		TemplateID: params.TemplateID,
+		AccountID:  params.AccountID,
+		Force:      params.Force,
 	}
 
 	b := new(bytes.Buffer)

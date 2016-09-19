@@ -268,60 +268,6 @@ func TestUpdateDisputeProducts(t *testing.T) {
 	}
 }
 
-func TestUpdateDisputeCustomerInfo(t *testing.T) {
-	ch := chargehound.New("api_key")
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "PUT" {
-			t.Error("Incorrect method.")
-		}
-
-		if r.URL.Path != "/v1/disputes/dp_xxx" {
-			t.Error("Incorrect path.")
-		}
-
-		decoder := json.NewDecoder(r.Body)
-		b := make(map[string]interface{})
-		err := decoder.Decode(&b)
-		if err != nil {
-			t.Error(err)
-		}
-
-		if b["template_id"] != "tmpl_1" {
-			t.Error("Incorrect template id.")
-		}
-
-		if b["customer_name"] != "name" {
-			t.Error("Incorrect customer name.")
-		}
-
-		if b["customer_email"] != "email" {
-			t.Error("Incorrect customer email.")
-		}
-
-		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
-	}))
-	defer ts.Close()
-
-	url, err := url.Parse(ts.URL)
-	if err != nil {
-		t.Error(err)
-	}
-
-	ch.Host = url.Host
-	ch.Protocol = url.Scheme + "://"
-
-	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
-		ID:            "dp_xxx",
-		TemplateID:    "tmpl_1",
-		CustomerName:  "name",
-		CustomerEmail: "email",
-	})
-	if err != nil {
-		t.Error(err)
-	}
-}
-
 func TestUpdateDisputeAccountID(t *testing.T) {
 	ch := chargehound.New("api_key")
 
