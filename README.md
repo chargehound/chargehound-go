@@ -75,4 +75,3 @@ To deploy a new version of the SDK, perform the following steps:
    ```git tag -a v{version} -m {message}```
  4. Push the tag to origin.
    ```git push origin v{version}```
- 5. Create a release for the tag on [Github](https://help.github.com/articles/creating-releases/).
