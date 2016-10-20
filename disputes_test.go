@@ -167,7 +167,7 @@ func TestUpdateDisputeFields(t *testing.T) {
 			t.Error(err)
 		}
 
-		if b["template_id"] != "tmpl_1" {
+		if b["template"] != "tmpl_1" {
 			t.Error("Incorrect template id.")
 		}
 
@@ -200,8 +200,8 @@ func TestUpdateDisputeFields(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
-		ID:         "dp_xxx",
-		TemplateID: "tmpl_1",
+		ID:       "dp_xxx",
+		Template: "tmpl_1",
 		Fields: map[string]interface{}{
 			"f1": "v1",
 			"f2": 2,
@@ -231,7 +231,7 @@ func TestUpdateDisputeProducts(t *testing.T) {
 			t.Error(err)
 		}
 
-		if b["template_id"] != "tmpl_1" {
+		if b["template"] != "tmpl_1" {
 			t.Error("Incorrect template id.")
 		}
 
@@ -259,9 +259,9 @@ func TestUpdateDisputeProducts(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
-		ID:         "dp_xxx",
-		TemplateID: "tmpl_1",
-		Products:   []chargehound.Product{{Name: "prod1", Amount: 100}},
+		ID:       "dp_xxx",
+		Template: "tmpl_1",
+		Products: []chargehound.Product{{Name: "prod1", Amount: 100}},
 	})
 	if err != nil {
 		t.Error(err)
@@ -354,6 +354,50 @@ func TestUpdateDisputeForce(t *testing.T) {
 	_, err = ch.Disputes.Submit(&chargehound.UpdateDisputeParams{
 		ID:    "dp_xxx",
 		Force: true,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestUpdateDisputeCharge(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx/submit" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["charge"] != "ch_XXX" {
+			t.Error("Incorrect charge parameter.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Submit(&chargehound.UpdateDisputeParams{
+		ID:     "dp_xxx",
+		Charge: "ch_XXX",
 	})
 	if err != nil {
 		t.Error(err)

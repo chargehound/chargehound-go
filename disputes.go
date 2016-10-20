@@ -89,22 +89,24 @@ type ListDisputesParams struct {
 // Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/index.html#updating-a-dispute.
 type UpdateDisputeParams struct {
 	// The dispute id.
-	ID         string
-	AccountID  string
-	Force      bool
-	TemplateID string
-	Fields     map[string]interface{}
-	Products   []Product
+	ID        string
+	AccountID string
+	Force     bool
+	Template  string
+	Charge    string
+	Fields    map[string]interface{}
+	Products  []Product
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
 
 type updateDisputeBody struct {
-	TemplateID string                 `json:"template_id,omitempty"`
-	AccountID  string                 `json:"account_id,omitempty"`
-	Force      bool                   `json:"force,omitempty"`
-	Fields     map[string]interface{} `json:"fields,omitempty"`
-	Products   []Product              `json:"products,omitempty"`
+	Template  string                 `json:"template,omitempty"`
+	Charge    string                 `json:"charge,omitempty"`
+	AccountID string                 `json:"account_id,omitempty"`
+	Force     bool                   `json:"force,omitempty"`
+	Fields    map[string]interface{} `json:"fields,omitempty"`
+	Products  []Product              `json:"products,omitempty"`
 }
 
 // Retrieve a single disputes.
@@ -163,11 +165,12 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 
 func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 	body := updateDisputeBody{
-		Fields:     params.Fields,
-		Products:   params.Products,
-		TemplateID: params.TemplateID,
-		AccountID:  params.AccountID,
-		Force:      params.Force,
+		Fields:    params.Fields,
+		Products:  params.Products,
+		Template:  params.Template,
+		AccountID: params.AccountID,
+		Force:     params.Force,
+		Charge:    params.Charge,
 	}
 
 	b := new(bytes.Buffer)

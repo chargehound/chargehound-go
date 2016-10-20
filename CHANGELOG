@@ -6,3 +6,7 @@
 
 2.0.0 Sept 19, 2016
   - Remove `CustomerName` and `CustomerEmail` parameters from structs.
+
+3.0.0 Sept 19, 2016
+  - Change `TemplateID` param to `Template`.
+  - Add `Charge` param to struct.
