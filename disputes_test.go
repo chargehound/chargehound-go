@@ -403,3 +403,28 @@ func TestUpdateDisputeCharge(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestResponseCode(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	list, err := ch.Disputes.List(&chargehound.ListDisputesParams{StartingAfter: "dp_yyy"})
+	if err != nil {
+		t.Error(err)
+	}
+	if list.Response.Status != 200 {
+		t.Error("Missing response status code.")
+	}
+}

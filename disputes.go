@@ -47,6 +47,7 @@ type Dispute struct {
 	Created             string                 `json:"created"`
 	Updated             string                 `json:"updated"`
 	Source              string                 `json:"source"`
+	Response            Response                 `json:"-"`
 }
 
 // Dispute product data See https://www.chargehound.com/docs/api/index.html#product-data.
@@ -67,6 +68,7 @@ type DisputeList struct {
 	Livemode bool      `json:"livemode"`
 	Object   string    `json:"object"`
 	Url      string    `json:"url"`
+	Response            Response                 `json:"-"`
 }
 
 // Params for a retrieve dispute request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-dispute.
@@ -84,6 +86,12 @@ type ListDisputesParams struct {
 	EndingBefore  string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
+}
+
+// Data about the API response that created the Chargehound object.
+type Response struct {
+	// The HTTP status code.
+	Status int
 }
 
 // Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/index.html#updating-a-dispute.
@@ -125,7 +133,10 @@ func (dp *Disputes) Retrieve(params *RetrieveDisputeParams) (*Dispute, error) {
 	}
 
 	var v Dispute
-	err = req.newRequest(&v)
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = Response{Status: res.StatusCode}
+	}
 
 	return &v, err
 }
@@ -158,7 +169,10 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 	}
 
 	var v DisputeList
-	err = req.newRequest(&v)
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = Response{Status: res.StatusCode}
+	}
 
 	return &v, err
 }
@@ -200,7 +214,10 @@ func (dp *Disputes) Update(params *UpdateDisputeParams) (*Dispute, error) {
 	}
 
 	var v Dispute
-	err = req.newRequest(&v)
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = Response{Status: res.StatusCode}
+	}
 
 	return &v, err
 }
@@ -226,7 +243,10 @@ func (dp *Disputes) Submit(params *UpdateDisputeParams) (*Dispute, error) {
 	}
 
 	var v Dispute
-	err = req.newRequest(&v)
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = Response{Status: res.StatusCode}
+	}
 
 	return &v, err
 }
