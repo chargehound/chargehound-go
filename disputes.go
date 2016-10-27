@@ -108,6 +108,61 @@ type UpdateDisputeParams struct {
 	OptHTTPClient *http.Client
 }
 
+type CreateDisputeParams struct {
+	// The id of the dispute in your payment processor. For Stripe looks like `dp_XXX`.
+	ExternalIdentifier string `json:"external_identifier"`
+	// The id of the disputed charge in your payment processor. For Stripe looks like `ch_XXX`.
+	ExternalCharge string `json:"external_charge"`
+	// The id of the charged customer in your payment processor. For Stripe looks like `cus_XXX`.
+	ExternalCustomer string `json:"external_customer,omitempty"`
+	// The bank provided reason for the dispute. One of `general`, `fraudulent`, `duplicate`, `subscription_canceled`, `product_unacceptable`, `product_not_received`, `unrecognized`, `credit_not_processed`, `incorrect_account_details`, `insufficient_funds`, `bank_cannot_process`, `debit_not_authorized`.
+	Reason string `json:"reason"`
+	// ISO 8601 timestamp - when the charge was made.
+	ChargedAt string `json:"charged_at"`
+	// ISO 8601 timestamp - when the charge was disputed.
+	DisputedAt string `json:"disputed_at"`
+	// ISO 8601 timestamp - when dispute evidence needs to be disputed by.
+	DueBy string `json:"due_by"`
+	// The currency code of the disputed charge. e.g. 'USD'.
+	Currency string `json:"currency"`
+	// The amount of the disputed charge. Amounts are in cents (or other minor currency unit.)
+	Amount int `json:"amount"`
+	// The payment processor for the charge. Currently the only possible value is `stripe`.
+	Processor string `json:"processor,omitempty"`
+	// The state of the dispute. One of `needs_response`, `warning_needs_response`.
+	State string `json:"state,omitempty"`
+	// The currency code of the dispute balance withdrawal. e.g. 'USD'.
+	ReversalCurrency string `json:"reversal_currency,omitempty"`
+	// The amount of the dispute fee. Amounts are in cents (or other minor currency unit.)
+	Fee int `json:"fee,omitempty"`
+	// The amount of the dispute balance withdrawal (without fee). Amounts are in cents (or other minor currency unit.)
+	ReversalAmount int `json:"reversal_amount,omitempty"`
+	// The total amount of the dispute balance withdrawal (with fee). Amounts are in cents (or other minor currency unit.)
+	ReversalTotal int `json:"reversal_total,omitempty"`
+	// Is the disputed charge refundable.
+	IsChargeRefundable bool `json:"is_charge_refundable,omitempty"`
+	// How many times has dispute evidence been submitted.
+	SubmittedCount int `json:"submitted_count,omitempty"`
+	// State of address check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	AddressLine1Check string `json:"address_line1_check,omitempty"`
+	// State of address zip check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	AddressZipCheck string `json:"address_zip_check,omitempty"`
+	// State of cvc check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	CVCCheck string `json:"cvc_check,omitempty"`
+	// The id of the template to use.
+	Template string `json:"template,omitempty"`
+	// Key value pairs to hydrate the template's evidence fields.
+	Fields map[string]interface{} `json:"fields,omitempty"`
+	// List of products the customer purchased.
+	Products []Product `json:"products,omitempty"`
+	// Set the account id for Connected accounts that are charged directly through Stripe.
+	AccountID string `json:"account_id,omitempty"`
+	// Submit dispute evidence immediately after creation.
+	Submit bool `json:"submit,omitempty"`
+	// Optional http client for the request. Typically needed when using App Engine.
+	OptHTTPClient *http.Client `json:"-"`
+}
+
 type updateDisputeBody struct {
 	Template  string                 `json:"template,omitempty"`
 	Charge    string                 `json:"charge,omitempty"`
@@ -115,6 +170,33 @@ type updateDisputeBody struct {
 	Force     bool                   `json:"force,omitempty"`
 	Fields    map[string]interface{} `json:"fields,omitempty"`
 	Products  []Product              `json:"products,omitempty"`
+}
+
+// Create a dispute
+func (dp *Disputes) Create(params *CreateDisputeParams) (*Dispute, error) {
+	b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(params)
+
+	req, err := newAPIRequestor(
+		dp.client,
+		params.OptHTTPClient,
+		"POST",
+		"disputes",
+		b,
+		nil, // no query params
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var v Dispute
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = Response{Status: res.StatusCode}
+	}
+
+	return &v, err
 }
 
 // Retrieve a single disputes.

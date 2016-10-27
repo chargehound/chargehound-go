@@ -428,3 +428,71 @@ func TestResponseCode(t *testing.T) {
 		t.Error("Missing response status code.")
 	}
 }
+
+func TestCreateDispute(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["external_identifier"] != "dp_xxx" {
+			t.Error("Incorrect dispute id.")
+		}
+
+		if b["template"] != "tmpl_1" {
+			t.Error("Incorrect template id.")
+		}
+
+		fields := b["fields"].(map[string]interface{})
+
+		if fields["f1"] != "v1" {
+			t.Error("Incorrect string field.")
+		}
+
+		if fields["f2"] != 2.0 {
+			t.Error("Incorrect int field.")
+		}
+
+		_, ok := b["products"]
+
+		if ok {
+			t.Error("Incorrect products data.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Create(&chargehound.CreateDisputeParams{
+		ExternalIdentifier: "dp_xxx",
+		Template:           "tmpl_1",
+		Fields: map[string]interface{}{
+			"f1": "v1",
+			"f2": 2,
+		},
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
