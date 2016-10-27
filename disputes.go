@@ -43,7 +43,7 @@ type Dispute struct {
 	// Any fields required by the template that have not yet been provided.
 	MissingFields map[string]interface{} `json:"missing_fields"`
 	// (Optional) A list of products in the disputed order. (See [Product data](#product-data) for details.)
-	Products []Products `json:"products"`
+	Products []Product `json:"products"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
 	// Can the charge be refunded.
