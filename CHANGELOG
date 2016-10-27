@@ -12,6 +12,6 @@
   - Add `Charge` param to struct.
 
 4.0.0 October, 2016
-  - Add create dispute function.
+  - Add create Dispute function
   - Add response status code to responses
   - Update Dispute struct and casing
