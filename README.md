@@ -13,8 +13,37 @@ Every resource is accessed via the `Client` instance:
 
 ```go
 ch := chargehound.New("{{your_api_key}}")
+```
 
-disputes, err := ch.Disputes.List(nil)
+### Requests
+
+Go requests use defined structs to represent parameters.
+
+```go
+params := chargehound.UpdateDisputeParams{
+  ID:       "dp_XXX",
+  Template: "unrecognized",
+  Fields: map[string]interface{}{
+    "customer_name": "Susie Chargeback",
+  },
+}
+
+dispute, err := ch.Disputes.Submit(&params)
+```
+
+### Responses
+
+Responses from the API are automatically parsed from JSON and returned as Go structs.
+
+Responses also include the HTTP status code on the response object as the status field.
+
+```go
+dispute, err := ch.Disputes.Retrieve("dp_123")
+
+fmt.Println("{}", dispute.ID)
+// "dp_123"
+fmt.Println("{}", dispute.Response.Status)
+// 200
 ```
 
 ## Documentation
@@ -31,7 +60,6 @@ If you're using the library in a Google App Engine environment, you can pass a c
 
 ```go
 import (
-  "fmt"
   "net/http"
 
   "google.golang.org/appengine"
