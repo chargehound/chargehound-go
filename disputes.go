@@ -153,7 +153,7 @@ type CreateDisputeParams struct {
 	ExternalIdentifier string `json:"external_identifier"`
 	// The id of the disputed charge in your payment processor. For Stripe looks like `ch_XXX`.
 	ExternalCharge string `json:"external_charge"`
-	// The id of the charged customer in your payment processor. For Stripe looks like `cus_XXX`.
+	// The id of the charged customer in your payment processor. For Stripe looks like `cus_XXX`. (optional)
 	ExternalCustomer string `json:"external_customer,omitempty"`
 	// The bank provided reason for the dispute. One of `general`, `fraudulent`, `duplicate`, `subscription_canceled`, `product_unacceptable`, `product_not_received`, `unrecognized`, `credit_not_processed`, `incorrect_account_details`, `insufficient_funds`, `bank_cannot_process`, `debit_not_authorized`.
 	Reason string `json:"reason"`
@@ -167,37 +167,37 @@ type CreateDisputeParams struct {
 	Currency string `json:"currency"`
 	// The amount of the disputed charge. Amounts are in cents (or other minor currency unit.)
 	Amount int `json:"amount"`
-	// The payment processor for the charge. One of `braintree` or `stripe`.
+	// The payment processor for the charge. One of `braintree` or `stripe`. (optional)
 	Processor string `json:"processor,omitempty"`
-	// The state of the dispute. One of `needs_response`, `warning_needs_response`.
+	// The state of the dispute. One of `needs_response`, `warning_needs_response`. (optional)
 	State string `json:"state,omitempty"`
-	// The currency code of the dispute balance withdrawal. e.g. 'USD'.
+	// The currency code of the dispute balance withdrawal. e.g. 'USD'. (optional)
 	ReversalCurrency string `json:"reversal_currency,omitempty"`
-	// The amount of the dispute fee. Amounts are in cents (or other minor currency unit.)
+	// The amount of the dispute fee. Amounts are in cents (or other minor currency unit.) (optional)
 	Fee int `json:"fee,omitempty"`
-	// The amount of the dispute balance withdrawal (without fee). Amounts are in cents (or other minor currency unit.)
+	// The amount of the dispute balance withdrawal (without fee). Amounts are in cents (or other minor currency unit.) (optional)
 	ReversalAmount int `json:"reversal_amount,omitempty"`
-	// The total amount of the dispute balance withdrawal (with fee). Amounts are in cents (or other minor currency unit.)
+	// The total amount of the dispute balance withdrawal (with fee). Amounts are in cents (or other minor currency unit.) (optional)
 	ReversalTotal int `json:"reversal_total,omitempty"`
-	// Is the disputed charge refundable.
+	// Is the disputed charge refundable. (optional)
 	IsChargeRefundable bool `json:"is_charge_refundable,omitempty"`
-	// How many times has dispute evidence been submitted.
+	// How many times has dispute evidence been submitted. (optional)
 	SubmittedCount int `json:"submitted_count,omitempty"`
-	// State of address check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	// State of address check (if available). One of `pass`, `fail`, `unavailable`, `checked`. (optional)
 	AddressLine1Check string `json:"address_line1_check,omitempty"`
-	// State of address zip check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	// State of address zip check (if available). One of `pass`, `fail`, `unavailable`, `checked`. (optional)
 	AddressZipCheck string `json:"address_zip_check,omitempty"`
-	// State of cvc check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	// State of cvc check (if available). One of `pass`, `fail`, `unavailable`, `checked`. (optional)
 	CVCCheck string `json:"cvc_check,omitempty"`
-	// The id of the template to use.
+	// The id of the template to use. (optional)
 	Template string `json:"template,omitempty"`
-	// Key value pairs to hydrate the template's evidence fields.
+	// Key value pairs to hydrate the template's evidence fields. (optional)
 	Fields map[string]interface{} `json:"fields,omitempty"`
-	// List of products the customer purchased.
+	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
-	// Set the account id for Connected accounts that are charged directly through Stripe.
+	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
-	// Submit dispute evidence immediately after creation.
+	// Submit dispute evidence immediately after creation. (optional)
 	Submit bool `json:"submit,omitempty"`
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client `json:"-"`
