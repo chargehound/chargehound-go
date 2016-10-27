@@ -16,38 +16,78 @@ type Disputes struct {
 
 // A dispute. See https://www.chargehound.com/docs/api/index.html#disputes.
 type Dispute struct {
-	ID                  string                 `json:"id"`
-	State               string                 `json:"state"`
-	Reason              string                 `json:"reason"`
-	ChargedAt           string                 `json:"charged_at"`
-	DisputedAt          string                 `json:"disputed_at"`
-	DueBy               string                 `json:"due_by"`
-	SubmittedAt         string                 `json:"submitted_at"`
-	ClosedAt            string                 `json:"closed_at"`
-	SubmittedCount      int                    `json:"submitted_count"`
-	FileUrl             string                 `json:"file_url"`
-	Template            string                 `json:"template"`
-	Fields              map[string]interface{} `json:"fields"`
-	MissingFields       map[string]interface{} `json:"missing_fields"`
-	Products            []Product              `json:"products"`
-	Charge              string                 `json:"charge"`
-	IsChargeRefundable  bool                   `json:"is_charge_refundable"`
-	Amount              int                    `json:"amount"`
-	Currency            string                 `json:"currency"`
-	Fee                 int                    `json:"fee"`
-	ExternalCustomer    string                 `json:"external_customer"`
-	CustomerName        string                 `json:"customer_name"`
-	CustomerEmail       string                 `json:"customer_email"`
-	CustomerPurchaseIp  string                 `json:"customer_purchase_ip"`
-	AddressZip          string                 `json:"address_zip"`
-	AddressLine1Check   string                 `json:"address_line1_check"`
-	AddressZipCheck     string                 `json:"address_zip_check"`
-	CvcCheck            string                 `json:"cvc_check"`
-	StatementDescriptor string                 `json:"statement_descriptor"`
-	Created             string                 `json:"created"`
-	Updated             string                 `json:"updated"`
-	Source              string                 `json:"source"`
-	Response            Response               `json:"-"`
+	// A unique identifier for the dispute. This id is set by the payment processor of the dispute.
+	ID string `json:"id"`
+	// State of the dispute. One of `needs_response`,`submitted`, `under_review`, `won`, `lost`, `warning_needs_response`, `warning_under_review`, `warning_closed` , `response_disabled`, `charge_refunded`.
+	State string `json:"state"`
+	// Reason for the dispute. One of `fraudulent`, `unrecognized`, `general`, `duplicate`, `subscription_canceled`, `product_unacceptable`, `product_not_received`, `credit_not_processed`, `incorrect_account_details`, `insufficient_funds`, `bank_cannot_process`, `debit_not_authorized`, `goods_services_returned_or_refused`, `goods_services_cancelled` |
+	Reason string `json:"reason"`
+	// ISO 8601 timestamp - when the charge was made.
+	ChargedAt string `json:"charged_at"`
+	// ISO 8601 timestamp - when the charge was disputed.
+	DisputedAt string `json:"disputed_at"`
+	// ISO 8601 timestamp - when dispute evidence needs to be disputed by.
+	DueBy string `json:"due_by"`
+	// ISO 8601 timestamp - when dispute evidence was submitted.
+	SubmittedAt string `json:"submitted_at"`
+	// ISO 8601 timestamp - when the dispute was resolved.
+	ClosedAt string `json:"closed_at"`
+	// Number of times the dispute evidence has been submitted.
+	SubmittedCount int `json:"submitted_count"`
+	// Location of the generated evidence document.
+	FileURL string `json:"file_url"`
+	// Id of the template attached to the dispute.
+	Template string `json:"template"`
+	// Evidence fields attached to the dispute.
+	Fields map[string]interface{} `json:"fields"`
+	// Any fields required by the template that have not yet been provided.
+	MissingFields map[string]interface{} `json:"missing_fields"`
+	// (Optional) A list of products in the disputed order. (See [Product data](#product-data) for details.)
+	Products []Products `json:"products"`
+	// Id of the disputed charge.
+	Charge string `json:"charge"`
+	// Can the charge be refunded.
+	IsChargeRefundable bool `json:"is_charge_refundable"`
+	// Amount of the disputed charge. Amounts are in cents (or other minor currency unit.)
+	Amount int `json:"amount"`
+	// Currency code of the disputed charge. e.g. 'USD'.
+	Currency string `json:"currency"`
+	// Dispute fee.
+	Fee int `json:"fee"`
+	// The amount deducted due to the chargeback. Amounts are in cents (or other minor currency unit.)
+	ReversalAmount int `json:"reversal_amount"`
+	// Currency code of the deduction amount. e.g. 'USD'.
+	ReversalCurrency string `json:"reversal_currency"`
+	// Id of the customer (if any). This id is set by the payment processor of the dispute.
+	ExternalCustomer string `json:"external_customer"`
+	// Name of the customer (if any).
+	CustomerName string `json:"customer_name"`
+	// Email of the customer (if any).
+	CustomerEmail string `json:"customer_email"`
+	// IP of purchase (if available).
+	CustomerPurchaseIP string `json:"customer_purchase_ip"`
+	// Billing address zip of the charge.
+	AddressZip string `json:"address_zip"`
+	// State of address check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	AddressLine1Check string `json:"address_line1_check"`
+	// State of address zip check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	AddressZipCheck string `json:"address_zip_check"`
+	// State of cvc check (if available). One of `pass`, `fail`, `unavailable`, `checked`.
+	CVCCheck string `json:"cvc_check"`
+	// The descriptor that appears on the customer's credit card statement for this change.
+	StatementDescriptor string `json:"statement_descriptor"`
+	// The account id for Connected accounts that are charged directly through Stripe (if any)
+	AccountID string `json:"account_id"`
+	// ISO 8601 timestamp.
+	Created string `json:"created"`
+	// ISO 8601 timestamp.
+	Updated string `json:"updated"`
+	// The source of the dispute. One of `mock`, `braintree`, `api` or `stripe`
+	Source string `json:"source"`
+	// The payment processor of the dispute. One of `braintree` or `stripe`
+	Processor string `json:"processor"`
+	// Data about the API response that created dispute.
+	Response Response `json:"-"`
 }
 
 // Dispute product data See https://www.chargehound.com/docs/api/index.html#product-data.
@@ -58,7 +98,7 @@ type Product struct {
 	Sku         string `json:"sku,omitempty"`
 	Quantity    int    `json:"quantity,omitempty"`
 	Amount      int    `json:"amount,omitempty"`
-	Url         string `json:"url,omitempty"`
+	URL         string `json:"url,omitempty"`
 }
 
 // The type returned by a list disputes request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-list-of-disputes.
@@ -67,7 +107,7 @@ type DisputeList struct {
 	HasMore  bool      `json:"has_more"`
 	Livemode bool      `json:"livemode"`
 	Object   string    `json:"object"`
-	Url      string    `json:"url"`
+	URL      string    `json:"url"`
 	Response Response  `json:"-"`
 }
 
@@ -127,7 +167,7 @@ type CreateDisputeParams struct {
 	Currency string `json:"currency"`
 	// The amount of the disputed charge. Amounts are in cents (or other minor currency unit.)
 	Amount int `json:"amount"`
-	// The payment processor for the charge. Currently the only possible value is `stripe`.
+	// The payment processor for the charge. One of `braintree` or `stripe`.
 	Processor string `json:"processor,omitempty"`
 	// The state of the dispute. One of `needs_response`, `warning_needs_response`.
 	State string `json:"state,omitempty"`
