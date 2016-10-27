@@ -47,7 +47,7 @@ type Dispute struct {
 	Created             string                 `json:"created"`
 	Updated             string                 `json:"updated"`
 	Source              string                 `json:"source"`
-	Response            Response                 `json:"-"`
+	Response            Response               `json:"-"`
 }
 
 // Dispute product data See https://www.chargehound.com/docs/api/index.html#product-data.
@@ -68,7 +68,7 @@ type DisputeList struct {
 	Livemode bool      `json:"livemode"`
 	Object   string    `json:"object"`
 	Url      string    `json:"url"`
-	Response            Response                 `json:"-"`
+	Response Response  `json:"-"`
 }
 
 // Params for a retrieve dispute request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-dispute.
