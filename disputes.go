@@ -87,7 +87,7 @@ type Dispute struct {
 	// The payment processor of the dispute. One of `braintree` or `stripe`
 	Processor string `json:"processor"`
 	// Data about the API response that created dispute.
-	Response Response `json:"-"`
+	Response HTTPResponse `json:"-"`
 }
 
 // Dispute product data See https://www.chargehound.com/docs/api/index.html#product-data.
@@ -103,12 +103,23 @@ type Product struct {
 
 // The type returned by a list disputes request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-list-of-disputes.
 type DisputeList struct {
-	Data     []Dispute `json:"data"`
-	HasMore  bool      `json:"has_more"`
-	Livemode bool      `json:"livemode"`
-	Object   string    `json:"object"`
-	URL      string    `json:"url"`
-	Response Response  `json:"-"`
+	Data     []Dispute    `json:"data"`
+	HasMore  bool         `json:"has_more"`
+	Livemode bool         `json:"livemode"`
+	Object   string       `json:"object"`
+	URL      string       `json:"url"`
+	Response HTTPResponse `json:"-"`
+}
+
+// The type returned by a dispute response request.
+type Response struct {
+	Livemode       bool                   `json:"livemode"`
+	DisputeID      string                 `json:"dispute_id"`
+	ExternalCharge string                 `json:"external_charge"`
+	AccountID      string                 `json:"account_id"`
+	Evidence       map[string]interface{} `json:"evidence"`
+	ResponseURL    string                 `json:"response_url"`
+	Response       HTTPResponse           `json:"-"`
 }
 
 // Params for a retrieve dispute request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-dispute.
@@ -129,7 +140,7 @@ type ListDisputesParams struct {
 }
 
 // Data about the API response that created the Chargehound object.
-type Response struct {
+type HTTPResponse struct {
 	// The HTTP status code.
 	Status int
 }
@@ -233,7 +244,7 @@ func (dp *Disputes) Create(params *CreateDisputeParams) (*Dispute, error) {
 	var v Dispute
 	res, err := req.newRequest(&v)
 	if err == nil {
-		v.Response = Response{Status: res.StatusCode}
+		v.Response = HTTPResponse{Status: res.StatusCode}
 	}
 
 	return &v, err
@@ -257,7 +268,31 @@ func (dp *Disputes) Retrieve(params *RetrieveDisputeParams) (*Dispute, error) {
 	var v Dispute
 	res, err := req.newRequest(&v)
 	if err == nil {
-		v.Response = Response{Status: res.StatusCode}
+		v.Response = HTTPResponse{Status: res.StatusCode}
+	}
+
+	return &v, err
+}
+
+// Retrieve the response for a dispute.
+func (dp *Disputes) Response(params *RetrieveDisputeParams) (*Response, error) {
+	req, err := newAPIRequestor(
+		dp.client,
+		params.OptHTTPClient,
+		"GET",
+		fmt.Sprintf("disputes/%s/response", params.ID),
+		nil, // no body json
+		nil, // no query params
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var v Response
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = HTTPResponse{Status: res.StatusCode}
 	}
 
 	return &v, err
@@ -293,7 +328,7 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 	var v DisputeList
 	res, err := req.newRequest(&v)
 	if err == nil {
-		v.Response = Response{Status: res.StatusCode}
+		v.Response = HTTPResponse{Status: res.StatusCode}
 	}
 
 	return &v, err
@@ -338,7 +373,7 @@ func (dp *Disputes) Update(params *UpdateDisputeParams) (*Dispute, error) {
 	var v Dispute
 	res, err := req.newRequest(&v)
 	if err == nil {
-		v.Response = Response{Status: res.StatusCode}
+		v.Response = HTTPResponse{Status: res.StatusCode}
 	}
 
 	return &v, err
@@ -367,7 +402,7 @@ func (dp *Disputes) Submit(params *UpdateDisputeParams) (*Dispute, error) {
 	var v Dispute
 	res, err := req.newRequest(&v)
 	if err == nil {
-		v.Response = Response{Status: res.StatusCode}
+		v.Response = HTTPResponse{Status: res.StatusCode}
 	}
 
 	return &v, err

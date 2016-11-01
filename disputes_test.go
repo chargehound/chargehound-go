@@ -48,6 +48,44 @@ func TestRetrieveDispute(t *testing.T) {
 	}
 }
 
+func TestRetrieveDisputeResponse(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx/response" {
+			t.Error("Incorrect path.")
+		}
+
+		if r.Header.Get("User-Agent") != "Chargehound/v1 GoBindings/"+ch.Version {
+			t.Error("Incorrect version.")
+		}
+
+		if r.Header.Get("Authorization") != "Basic YXBpX2tleTo=" {
+			t.Error("Incorrect authorization.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Response(&chargehound.RetrieveDisputeParams{ID: "dp_xxx"})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 type TestTransport struct {
 	Called    bool
 	Transport *http.Transport
