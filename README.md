@@ -40,8 +40,8 @@ Responses also include the HTTP status code on the response object as the status
 ```go
 dispute, err := ch.Disputes.Retrieve("dp_123")
 
-fmt.Println("{}", dispute.ID)
-// "dp_123"
+fmt.Println("{}", dispute.State)
+// "needs_response"
 fmt.Println("{}", dispute.Response.Status)
 // 200
 ```
