@@ -45,10 +45,10 @@ func newAPIRequestor(cc *Client, optHTTP *http.Client, method, path string, body
 	return &requestor, nil
 }
 
-func (ar *apiRequestor) newRequest(v interface{}) error {
+func (ar *apiRequestor) newRequest(v interface{}) (*http.Response, error) {
 	req, err := http.NewRequest(ar.method, ar.url, ar.bodyJSON)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	req.SetBasicAuth(ar.apiKey, "")
@@ -58,13 +58,14 @@ func (ar *apiRequestor) newRequest(v interface{}) error {
 
 	res, err := ar.httpClient.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if res.StatusCode >= 400 {
-		return responseToError(res)
+		return nil, responseToError(res)
 	}
 
 	decoder := json.NewDecoder(res.Body)
-	return decoder.Decode(&v)
+	err = decoder.Decode(&v)
+	return res, err
 }
