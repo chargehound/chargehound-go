@@ -208,6 +208,8 @@ type CreateDisputeParams struct {
 	Products []Product `json:"products,omitempty"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
+	// Set the kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'. (optional)
+	Kind string `json:"submit,omitempty"`
 	// Submit dispute evidence immediately after creation. (optional)
 	Submit bool `json:"submit,omitempty"`
 	// Optional http client for the request. Typically needed when using App Engine.
