@@ -16,3 +16,6 @@
   - Add Dispute response retrieve method
   - Add response status code to responses
   - Update Dispute struct and casing
+  
+ 4.0.1 Jan, 2017
+  - Add Dispute kind param for create
