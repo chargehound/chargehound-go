@@ -78,6 +78,8 @@ type Dispute struct {
 	StatementDescriptor string `json:"statement_descriptor"`
 	// The account id for Connected accounts that are charged directly through Stripe (if any)
 	AccountID string `json:"account_id"`
+	// The kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'.
+	Kind string `json:"kind"`
 	// ISO 8601 timestamp.
 	Created string `json:"created"`
 	// ISO 8601 timestamp.
