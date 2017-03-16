@@ -306,7 +306,7 @@ func TestUpdateDisputeProducts(t *testing.T) {
 	}
 }
 
-func TestUpdateDisputeAccountID(t *testing.T) {
+func TestUpdateDisputeUserID(t *testing.T) {
 	ch := chargehound.New("api_key")
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -325,7 +325,7 @@ func TestUpdateDisputeAccountID(t *testing.T) {
 			t.Error(err)
 		}
 
-		if b["account_id"] != "acct_xxx" {
+		if b["user_id"] != "acct_xxx" {
 			t.Error("Incorrect account id.")
 		}
 
@@ -346,8 +346,8 @@ func TestUpdateDisputeAccountID(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
-		ID:        "dp_xxx",
-		AccountID: "acct_xxx",
+		ID:     "dp_xxx",
+		UserID: "acct_xxx",
 	})
 	if err != nil {
 		t.Error(err)
@@ -486,7 +486,7 @@ func TestCreateDispute(t *testing.T) {
 			t.Error(err)
 		}
 
-		if b["external_identifier"] != "dp_xxx" {
+		if b["id"] != "dp_xxx" {
 			t.Error("Incorrect dispute id.")
 		}
 
@@ -523,8 +523,8 @@ func TestCreateDispute(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.Create(&chargehound.CreateDisputeParams{
-		ExternalIdentifier: "dp_xxx",
-		Template:           "tmpl_1",
+		ID:       "dp_xxx",
+		Template: "tmpl_1",
 		Fields: map[string]interface{}{
 			"f1": "v1",
 			"f2": 2,
