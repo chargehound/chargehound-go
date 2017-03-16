@@ -59,7 +59,7 @@ type Dispute struct {
 	// Currency code of the deduction amount. e.g. 'USD'.
 	ReversalCurrency string `json:"reversal_currency"`
 	// Id of the customer (if any). This id is set by the payment processor of the dispute.
-	ExternalCustomer string `json:"external_customer"`
+	Customer string `json:"customer"`
 	// Name of the customer (if any).
 	CustomerName string `json:"customer_name"`
 	// Email of the customer (if any).
@@ -77,7 +77,7 @@ type Dispute struct {
 	// The descriptor that appears on the customer's credit card statement for this change.
 	StatementDescriptor string `json:"statement_descriptor"`
 	// The account id for Connected accounts that are charged directly through Stripe (if any)
-	AccountID string `json:"account_id"`
+	UserID string `json:"user_id"`
 	// The kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'.
 	Kind string `json:"kind"`
 	// ISO 8601 timestamp.
@@ -150,24 +150,26 @@ type HTTPResponse struct {
 // Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/index.html#updating-a-dispute.
 type UpdateDisputeParams struct {
 	// The dispute id.
-	ID        string
-	AccountID string
-	Force     bool
-	Template  string
-	Charge    string
-	Fields    map[string]interface{}
-	Products  []Product
+	ID     string
+	UserID string
+	// Id of the connected account for this dispute (if multiple accounts are connected)
+	Account  string
+	Force    bool
+	Template string
+	Charge   string
+	Fields   map[string]interface{}
+	Products []Product
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
 
 type CreateDisputeParams struct {
 	// The id of the dispute in your payment processor. For Stripe looks like `dp_XXX`.
-	ExternalIdentifier string `json:"external_identifier"`
+	ID string `json:"id"`
 	// The id of the disputed charge in your payment processor. For Stripe looks like `ch_XXX`.
-	ExternalCharge string `json:"external_charge"`
+	Charge string `json:"charge"`
 	// The id of the charged customer in your payment processor. For Stripe looks like `cus_XXX`. (optional)
-	ExternalCustomer string `json:"external_customer,omitempty"`
+	Customer string `json:"customer,omitempty"`
 	// The bank provided reason for the dispute. One of `general`, `fraudulent`, `duplicate`, `subscription_canceled`, `product_unacceptable`, `product_not_received`, `unrecognized`, `credit_not_processed`, `incorrect_account_details`, `insufficient_funds`, `bank_cannot_process`, `debit_not_authorized`.
 	Reason string `json:"reason"`
 	// ISO 8601 timestamp - when the charge was made.
@@ -209,7 +211,7 @@ type CreateDisputeParams struct {
 	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
-	AccountID string `json:"account_id,omitempty"`
+	UserID string `json:"user_id,omitempty"`
 	// Set the kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'. (optional)
 	Kind string `json:"kind,omitempty"`
 	// Submit dispute evidence immediately after creation. (optional)
@@ -219,12 +221,13 @@ type CreateDisputeParams struct {
 }
 
 type updateDisputeBody struct {
-	Template  string                 `json:"template,omitempty"`
-	Charge    string                 `json:"charge,omitempty"`
-	AccountID string                 `json:"account_id,omitempty"`
-	Force     bool                   `json:"force,omitempty"`
-	Fields    map[string]interface{} `json:"fields,omitempty"`
-	Products  []Product              `json:"products,omitempty"`
+	Template string                 `json:"template,omitempty"`
+	Charge   string                 `json:"charge,omitempty"`
+	Account  string                 `json:"account,omitempty"`
+	UserID   string                 `json:"user_id,omitempty"`
+	Force    bool                   `json:"force,omitempty"`
+	Fields   map[string]interface{} `json:"fields,omitempty"`
+	Products []Product              `json:"products,omitempty"`
 }
 
 // Create a dispute
@@ -340,12 +343,13 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 
 func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 	body := updateDisputeBody{
-		Fields:    params.Fields,
-		Products:  params.Products,
-		Template:  params.Template,
-		AccountID: params.AccountID,
-		Force:     params.Force,
-		Charge:    params.Charge,
+		Fields:   params.Fields,
+		Products: params.Products,
+		Template: params.Template,
+		UserID:   params.UserID,
+		Account:  params.Account,
+		Force:    params.Force,
+		Charge:   params.Charge,
 	}
 
 	b := new(bytes.Buffer)

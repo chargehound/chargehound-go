@@ -16,6 +16,13 @@
   - Add Dispute response retrieve method
   - Add response status code to responses
   - Update Dispute struct and casing
-  
+
  4.0.1 Jan, 2017
   - Add Dispute kind param for create
+
+ 5.0.0 Jan, 2017
+  - Change `ExternalIdentifier` to `ID`
+  - Change `ExternalCustomer` to `Customer`
+  - Change `ExternalCharge` to `Charge`
+  - Change `AccountID` to `UserID`
+  - Add `Account` param for account slugs
