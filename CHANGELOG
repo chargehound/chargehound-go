@@ -26,3 +26,6 @@
   - Change `ExternalCharge` to `Charge`
   - Change `AccountID` to `UserID`
   - Add `Account` param for account slugs
+
+5.1.0 Jan, 2017
+  - Add `State` param for dispute list
