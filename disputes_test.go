@@ -442,6 +442,83 @@ func TestUpdateDisputeCharge(t *testing.T) {
 	}
 }
 
+func TestQueueDispute(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx/submit" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["queue"] != true {
+			t.Error("Incorrect queue parameter.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Submit(&chargehound.UpdateDisputeParams{
+		ID:     "dp_xxx",
+		Charge: "ch_XXX",
+		Queue:  true,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestAcceptDispute(t *testing.T) {
+	ch := chargehound.New("api_key")
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx/accept" {
+			t.Error("Incorrect path.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Accept(&chargehound.AcceptDisputeParams{
+		ID: "dp_xxx",
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestResponseCode(t *testing.T) {
 	ch := chargehound.New("api_key")
 
