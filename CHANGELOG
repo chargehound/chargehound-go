@@ -29,3 +29,6 @@
 
 5.1.0 Jan, 2017
   - Add `State` param for dispute list
+
+5.2.0
+  - Add Accept endpoint and queue param
