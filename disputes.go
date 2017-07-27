@@ -18,7 +18,7 @@ type Disputes struct {
 type Dispute struct {
 	// A unique identifier for the dispute. This id is set by the payment processor of the dispute.
 	ID string `json:"id"`
-	// State of the dispute. One of `needs_response`,`submitted`, `under_review`, `won`, `lost`, `warning_needs_response`, `warning_under_review`, `warning_closed` , `response_disabled`, `charge_refunded`.
+	// State of the dispute. One of `needs_response`,`submitted`, `under_review`, `won`, `lost`, `warning_needs_response`, `warning_under_review`, `warning_closed` , `response_disabled`, `charge_refunded`, `accepted`, `queued`.
 	State string `json:"state"`
 	// Reason for the dispute. One of `fraudulent`, `unrecognized`, `general`, `duplicate`, `subscription_canceled`, `product_unacceptable`, `product_not_received`, `credit_not_processed`, `incorrect_account_details`, `insufficient_funds`, `bank_cannot_process`, `debit_not_authorized`, `goods_services_returned_or_refused`, `goods_services_cancelled` |
 	Reason string `json:"reason"`
@@ -132,6 +132,14 @@ type RetrieveDisputeParams struct {
 	OptHTTPClient *http.Client
 }
 
+// Params for a dispute accept request.
+type AcceptDisputeParams struct {
+	// The dispute id.
+	ID string
+	// Optional http client for the request. Typically needed when using App Engine.
+	OptHTTPClient *http.Client
+}
+
 // Params for a list disputes request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-list-of-disputes.
 type ListDisputesParams struct {
 	Limit         int
@@ -156,6 +164,7 @@ type UpdateDisputeParams struct {
 	// Id of the connected account for this dispute (if multiple accounts are connected)
 	Account  string
 	Force    bool
+	Queue    bool
 	Template string
 	Charge   string
 	Fields   map[string]interface{}
@@ -217,6 +226,8 @@ type CreateDisputeParams struct {
 	Kind string `json:"kind,omitempty"`
 	// Submit dispute evidence immediately after creation. (optional)
 	Submit bool `json:"submit,omitempty"`
+	// Queue dispute for submission immediately after creation. (optional)
+	Queue bool `json:"queue,omitempty"`
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client `json:"-"`
 }
@@ -227,6 +238,7 @@ type updateDisputeBody struct {
 	Account  string                 `json:"account,omitempty"`
 	UserID   string                 `json:"user_id,omitempty"`
 	Force    bool                   `json:"force,omitempty"`
+	Queue    bool                   `json:"queue,omitempty"`
 	Fields   map[string]interface{} `json:"fields,omitempty"`
 	Products []Product              `json:"products,omitempty"`
 }
@@ -354,6 +366,7 @@ func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 		UserID:   params.UserID,
 		Account:  params.Account,
 		Force:    params.Force,
+		Queue:    params.Queue,
 		Charge:   params.Charge,
 	}
 
@@ -405,6 +418,30 @@ func (dp *Disputes) Submit(params *UpdateDisputeParams) (*Dispute, error) {
 		"POST",
 		fmt.Sprintf("disputes/%s/submit", params.ID),
 		bodyJSON,
+		nil, // no query params
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var v Dispute
+	res, err := req.newRequest(&v)
+	if err == nil {
+		v.Response = HTTPResponse{Status: res.StatusCode}
+	}
+
+	return &v, err
+}
+
+// Accept a dispute.
+func (dp *Disputes) Accept(params *AcceptDisputeParams) (*Dispute, error) {
+	req, err := newAPIRequestor(
+		dp.client,
+		params.OptHTTPClient,
+		"POST",
+		fmt.Sprintf("disputes/%s/accept", params.ID),
+		nil, // no body json
 		nil, // no query params
 	)
 

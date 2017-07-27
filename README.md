@@ -93,6 +93,10 @@ $ go test
 
 Be sure to run gofmt on any code you plan on checking in.
 
+```bash
+gofmt -s -w .
+```
+
 ## Deployment
 
 To deploy a new version of the SDK, perform the following steps:
