@@ -11,7 +11,7 @@ import (
 )
 
 func TestRetrieveDispute(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -53,7 +53,7 @@ func TestRetrieveDispute(t *testing.T) {
 }
 
 func TestRetrieveDisputeResponse(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -101,7 +101,7 @@ func (tt *TestTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 }
 
 func TestOptHTTPClientDispute(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -149,7 +149,7 @@ func TestOptHTTPClientDispute(t *testing.T) {
 }
 
 func TestListDisputes(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -191,7 +191,7 @@ func TestListDisputes(t *testing.T) {
 }
 
 func TestUpdateDisputeFields(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
@@ -255,7 +255,7 @@ func TestUpdateDisputeFields(t *testing.T) {
 }
 
 func TestUpdateDisputeProducts(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
@@ -311,7 +311,7 @@ func TestUpdateDisputeProducts(t *testing.T) {
 }
 
 func TestUpdateDisputeUserID(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
@@ -359,7 +359,7 @@ func TestUpdateDisputeUserID(t *testing.T) {
 }
 
 func TestUpdateDisputeForce(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -403,7 +403,7 @@ func TestUpdateDisputeForce(t *testing.T) {
 }
 
 func TestUpdateDisputeCharge(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -447,7 +447,7 @@ func TestUpdateDisputeCharge(t *testing.T) {
 }
 
 func TestQueueDispute(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -492,7 +492,7 @@ func TestQueueDispute(t *testing.T) {
 }
 
 func TestAcceptDispute(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -524,7 +524,7 @@ func TestAcceptDispute(t *testing.T) {
 }
 
 func TestResponseCode(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
@@ -549,7 +549,7 @@ func TestResponseCode(t *testing.T) {
 }
 
 func TestCreateDispute(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
+	ch := chargehound.New("api_key", nil)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -617,7 +617,7 @@ func TestCreateDispute(t *testing.T) {
 }
 
 func TestOverrideAPIVersion(t *testing.T) {
-	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key", APIVersion: "1999-01-01"})
+	ch := chargehound.New("api_key", &chargehound.ClientParams{APIVersion: "1999-01-01"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {

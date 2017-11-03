@@ -12,7 +12,7 @@ This library currently requires go >= 1.6.
 Every resource is accessed via the `Client` instance:
 
 ```go
-ch := chargehound.New(&chargehound.ClientParams{APIKey: "{{your_api_key}}"})
+ch := chargehound.New("{{your_api_key}}", nil)
 ```
 
 ### Requests
@@ -68,7 +68,7 @@ import (
   "github.com/chargehound/chargehound-go"
 )
 
-ch := chargehound.New(&chargehound.ClientParams{APIKey: "{{your_api_key}}"})
+ch := chargehound.New("{{your_api_key}}", nil)
 
 func handler(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)

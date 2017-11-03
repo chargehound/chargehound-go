@@ -35,25 +35,30 @@ type Client struct {
 	Disputes *Disputes
 }
 
-// Chargehound client params
+// Chargehound client optional params.
 type ClientParams struct {
-	// The Chargehound API key used to interact with the API (Required).
-	APIKey string
-	// The API version (Optional).
+	// The API version
 	APIVersion string
 }
 
 // Creates a new chargehound client with the specified api key and the default configuration.
-func New(params *ClientParams) *Client {
+func New(key string, params *ClientParams) *Client {
+
+	var apiVersion string
+	if params != nil {
+		apiVersion = params.APIVersion
+	} else {
+		apiVersion = APIVersion
+	}
 
 	ch := Client{
-		APIKey:     params.APIKey,
+		APIKey:     key,
 		Basepath:   basepath,
 		Host:       host,
 		HTTPClient: &http.Client{Timeout: defaultHTTPTimeout},
 		Protocol:   protocol,
 		Version:    version,
-		APIVersion: params.APIVersion,
+		APIVersion: apiVersion,
 	}
 
 	ch.Disputes = &Disputes{client: &ch}
