@@ -617,7 +617,8 @@ func TestCreateDispute(t *testing.T) {
 }
 
 func TestOverrideAPIVersion(t *testing.T) {
-	ch := chargehound.New("api_key", &chargehound.ClientParams{APIVersion: "1999-01-01"})
+	ch := chargehound.New("api_key",
+		&chargehound.ClientParams{APIVersion: "1999-01-01"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
