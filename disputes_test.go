@@ -11,7 +11,7 @@ import (
 )
 
 func TestRetrieveDispute(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -28,6 +28,10 @@ func TestRetrieveDispute(t *testing.T) {
 
 		if r.Header.Get("Authorization") != "Basic YXBpX2tleTo=" {
 			t.Error("Incorrect authorization.")
+		}
+
+		if r.Header.Get("Chargehound-Version") != "" {
+			t.Error("Incorrect version.")
 		}
 
 		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
@@ -49,7 +53,7 @@ func TestRetrieveDispute(t *testing.T) {
 }
 
 func TestRetrieveDisputeResponse(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -97,7 +101,7 @@ func (tt *TestTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 }
 
 func TestOptHTTPClientDispute(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -145,7 +149,7 @@ func TestOptHTTPClientDispute(t *testing.T) {
 }
 
 func TestListDisputes(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -187,7 +191,7 @@ func TestListDisputes(t *testing.T) {
 }
 
 func TestUpdateDisputeFields(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
@@ -251,7 +255,7 @@ func TestUpdateDisputeFields(t *testing.T) {
 }
 
 func TestUpdateDisputeProducts(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
@@ -307,7 +311,7 @@ func TestUpdateDisputeProducts(t *testing.T) {
 }
 
 func TestUpdateDisputeUserID(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
@@ -355,7 +359,7 @@ func TestUpdateDisputeUserID(t *testing.T) {
 }
 
 func TestUpdateDisputeForce(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -399,7 +403,7 @@ func TestUpdateDisputeForce(t *testing.T) {
 }
 
 func TestUpdateDisputeCharge(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -443,7 +447,7 @@ func TestUpdateDisputeCharge(t *testing.T) {
 }
 
 func TestQueueDispute(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -488,7 +492,7 @@ func TestQueueDispute(t *testing.T) {
 }
 
 func TestAcceptDispute(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -520,7 +524,7 @@ func TestAcceptDispute(t *testing.T) {
 }
 
 func TestResponseCode(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
@@ -545,7 +549,7 @@ func TestResponseCode(t *testing.T) {
 }
 
 func TestCreateDispute(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -607,6 +611,48 @@ func TestCreateDispute(t *testing.T) {
 			"f2": 2,
 		},
 	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestOverrideAPIVersion(t *testing.T) {
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key", APIVersion: "1999-01-01"})
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx" {
+			t.Error("Incorrect path.")
+		}
+
+		if r.Header.Get("User-Agent") != "Chargehound/v1 GoBindings/"+ch.Version {
+			t.Error("Incorrect version.")
+		}
+
+		if r.Header.Get("Authorization") != "Basic YXBpX2tleTo=" {
+			t.Error("Incorrect authorization.")
+		}
+
+		if r.Header.Get("Chargehound-Version") != "1999-01-01" {
+			t.Error("Incorrect version.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Retrieve(&chargehound.RetrieveDisputeParams{ID: "dp_xxx"})
 	if err != nil {
 		t.Error(err)
 	}

@@ -48,7 +48,7 @@ var errorTests = []struct {
 }
 
 func TestErrors(t *testing.T) {
-	ch := chargehound.New("api_key")
+	ch := chargehound.New(&chargehound.ClientParams{APIKey: "api_key"})
 
 	for _, test := range errorTests {
 		error := test.error
