@@ -8,7 +8,8 @@ import (
 )
 
 type apiRequestor struct {
-	apiKey      string
+	APIKey      string
+	APIVersion  string
 	userAgent   string
 	bodyJSON    io.Reader
 	httpClient  *http.Client
@@ -33,7 +34,8 @@ func newAPIRequestor(cc *Client, optHTTP *http.Client, method, path string, body
 	}
 
 	requestor := apiRequestor{
-		apiKey:      cc.ApiKey,
+		APIKey:      cc.APIKey,
+		APIVersion:  cc.APIVersion,
 		bodyJSON:    bodyJSON,
 		httpClient:  HTTPClient,
 		method:      method,
@@ -51,10 +53,14 @@ func (ar *apiRequestor) newRequest(v interface{}) (*http.Response, error) {
 		return nil, err
 	}
 
-	req.SetBasicAuth(ar.apiKey, "")
+	req.SetBasicAuth(ar.APIKey, "")
 
 	req.Header.Add("User-Agent", ar.userAgent)
 	req.Header.Add("Content-Type", "application/json")
+
+	if ar.APIVersion != "" {
+		req.Header.Add("Chargehound-Version", ar.APIVersion)
+	}
 
 	res, err := ar.httpClient.Do(req)
 	if err != nil {
