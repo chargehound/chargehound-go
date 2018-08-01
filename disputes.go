@@ -88,6 +88,8 @@ type Dispute struct {
 	Source string `json:"source"`
 	// The payment processor of the dispute. One of `braintree` or `stripe`
 	Processor string `json:"processor"`
+	// Custom URL with dispute information.
+	ReferenceURL string `json:"reference_url"`
 	// Data about the API response that created dispute.
 	Response HTTPResponse `json:"-"`
 }
@@ -162,13 +164,14 @@ type UpdateDisputeParams struct {
 	ID     string
 	UserID string
 	// Id of the connected account for this dispute (if multiple accounts are connected)
-	Account  string
-	Force    bool
-	Queue    bool
-	Template string
-	Charge   string
-	Fields   map[string]interface{}
-	Products []Product
+	Account      string
+	Force        bool
+	Queue        bool
+	Template     string
+	Charge       string
+	Fields       map[string]interface{}
+	Products     []Product
+	ReferenceURL string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
@@ -228,19 +231,22 @@ type CreateDisputeParams struct {
 	Submit bool `json:"submit,omitempty"`
 	// Queue dispute for submission immediately after creation. (optional)
 	Queue bool `json:"queue,omitempty"`
+	// Custom URL with dispute information.
+	ReferenceURL string `json:"reference_url"`
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client `json:"-"`
 }
 
 type updateDisputeBody struct {
-	Template string                 `json:"template,omitempty"`
-	Charge   string                 `json:"charge,omitempty"`
-	Account  string                 `json:"account,omitempty"`
-	UserID   string                 `json:"user_id,omitempty"`
-	Force    bool                   `json:"force,omitempty"`
-	Queue    bool                   `json:"queue,omitempty"`
-	Fields   map[string]interface{} `json:"fields,omitempty"`
-	Products []Product              `json:"products,omitempty"`
+	Template     string                 `json:"template,omitempty"`
+	Charge       string                 `json:"charge,omitempty"`
+	Account      string                 `json:"account,omitempty"`
+	UserID       string                 `json:"user_id,omitempty"`
+	ReferenceURL string                 `json:"reference_url"`
+	Force        bool                   `json:"force,omitempty"`
+	Queue        bool                   `json:"queue,omitempty"`
+	Fields       map[string]interface{} `json:"fields,omitempty"`
+	Products     []Product              `json:"products,omitempty"`
 }
 
 // Create a dispute
@@ -360,14 +366,15 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 
 func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 	body := updateDisputeBody{
-		Fields:   params.Fields,
-		Products: params.Products,
-		Template: params.Template,
-		UserID:   params.UserID,
-		Account:  params.Account,
-		Force:    params.Force,
-		Queue:    params.Queue,
-		Charge:   params.Charge,
+		Fields:       params.Fields,
+		Products:     params.Products,
+		ReferenceURL: params.ReferenceURL,
+		Template:     params.Template,
+		UserID:       params.UserID,
+		Account:      params.Account,
+		Force:        params.Force,
+		Queue:        params.Queue,
+		Charge:       params.Charge,
 	}
 
 	b := new(bytes.Buffer)
