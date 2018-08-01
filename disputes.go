@@ -232,7 +232,7 @@ type CreateDisputeParams struct {
 	// Queue dispute for submission immediately after creation. (optional)
 	Queue bool `json:"queue,omitempty"`
 	// Custom URL with dispute information.
-	ReferenceURL string `json:"reference_url"`
+	ReferenceURL string `json:"reference_url,omitempty"`
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client `json:"-"`
 }
@@ -242,7 +242,7 @@ type updateDisputeBody struct {
 	Charge       string                 `json:"charge,omitempty"`
 	Account      string                 `json:"account,omitempty"`
 	UserID       string                 `json:"user_id,omitempty"`
-	ReferenceURL string                 `json:"reference_url"`
+	ReferenceURL string                 `json:"reference_url,omitempty"`
 	Force        bool                   `json:"force,omitempty"`
 	Queue        bool                   `json:"queue,omitempty"`
 	Fields       map[string]interface{} `json:"fields,omitempty"`
