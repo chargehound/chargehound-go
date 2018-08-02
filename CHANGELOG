@@ -37,3 +37,6 @@
   - Add support for overriding version
   - Change `ApiKey` to `APIKey`
   - Add ClientParams interface for client creation
+
+6.1.0 August, 2018
+  - Add `ReferenceURL` param to struct.
