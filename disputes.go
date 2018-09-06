@@ -34,8 +34,6 @@ type Dispute struct {
 	ClosedAt string `json:"closed_at"`
 	// Number of times the dispute evidence has been submitted.
 	SubmittedCount int `json:"submitted_count"`
-	// Location of the generated evidence document.
-	FileURL string `json:"file_url"`
 	// Id of the template attached to the dispute.
 	Template string `json:"template"`
 	// Evidence fields attached to the dispute.
