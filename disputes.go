@@ -34,15 +34,13 @@ type Dispute struct {
 	ClosedAt string `json:"closed_at"`
 	// Number of times the dispute evidence has been submitted.
 	SubmittedCount int `json:"submitted_count"`
-	// Location of the generated evidence document.
-	FileURL string `json:"file_url"`
 	// Id of the template attached to the dispute.
 	Template string `json:"template"`
 	// Evidence fields attached to the dispute.
 	Fields map[string]interface{} `json:"fields"`
 	// Any fields required by the template that have not yet been provided.
 	MissingFields map[string]interface{} `json:"missing_fields"`
-	// (Optional) A list of products in the disputed order. (See [Product data](#product-data) for details.)
+	// A list of products in the disputed order. (See [Product data](#product-data) for details.) (optional)
 	Products []Product `json:"products"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`

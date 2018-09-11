@@ -39,4 +39,7 @@
   - Add ClientParams interface for client creation
 
 6.1.0 August, 2018
-  - Add `ReferenceURL` param to struct.
+  - Add `ReferenceURL` param to structs.
+
+6.1.1 August, 2018
+  - Remove `FileURL` from structs.
