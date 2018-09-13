@@ -21,7 +21,7 @@ Go requests use defined structs to represent parameters.
 
 ```go
 params := chargehound.UpdateDisputeParams{
-  ID:       "dp_XXX",
+  ID:       "dp_123",
   Template: "unrecognized",
   Fields: map[string]interface{}{
     "customer_name": "Susie Chargeback",
