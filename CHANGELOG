@@ -43,3 +43,6 @@
 
 6.1.1 August, 2018
   - Remove `FileURL` from structs.
+
+7.0.0 August, 2018
+  - Change `UserID` was deprecated in favor of `AccountID`, this was backwards in the Go lib

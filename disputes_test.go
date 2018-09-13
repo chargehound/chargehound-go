@@ -329,7 +329,7 @@ func TestUpdateDisputeUserID(t *testing.T) {
 			t.Error(err)
 		}
 
-		if b["user_id"] != "acct_xxx" {
+		if b["account_id"] != "acct_xxx" {
 			t.Error("Incorrect account id.")
 		}
 
@@ -350,8 +350,8 @@ func TestUpdateDisputeUserID(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
-		ID:     "dp_xxx",
-		UserID: "acct_xxx",
+		ID:        "dp_xxx",
+		AccountID: "acct_xxx",
 	})
 	if err != nil {
 		t.Error(err)

@@ -75,7 +75,7 @@ type Dispute struct {
 	// The descriptor that appears on the customer's credit card statement for this change.
 	StatementDescriptor string `json:"statement_descriptor"`
 	// The account id for Connected accounts that are charged directly through Stripe (if any)
-	UserID string `json:"user_id"`
+	AccountID string `json:"account_id"`
 	// The kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'.
 	Kind string `json:"kind"`
 	// ISO 8601 timestamp.
@@ -159,8 +159,8 @@ type HTTPResponse struct {
 // Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/index.html#updating-a-dispute.
 type UpdateDisputeParams struct {
 	// The dispute id.
-	ID     string
-	UserID string
+	ID        string
+	AccountID string
 	// Id of the connected account for this dispute (if multiple accounts are connected)
 	Account      string
 	Force        bool
@@ -222,7 +222,7 @@ type CreateDisputeParams struct {
 	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
-	UserID string `json:"user_id,omitempty"`
+	AccountID string `json:"account_id,omitempty"`
 	// Set the kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'. (optional)
 	Kind string `json:"kind,omitempty"`
 	// Submit dispute evidence immediately after creation. (optional)
@@ -239,7 +239,7 @@ type updateDisputeBody struct {
 	Template     string                 `json:"template,omitempty"`
 	Charge       string                 `json:"charge,omitempty"`
 	Account      string                 `json:"account,omitempty"`
-	UserID       string                 `json:"user_id,omitempty"`
+	AccountID    string                 `json:"account_id,omitempty"`
 	ReferenceURL string                 `json:"reference_url,omitempty"`
 	Force        bool                   `json:"force,omitempty"`
 	Queue        bool                   `json:"queue,omitempty"`
@@ -368,7 +368,7 @@ func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 		Products:     params.Products,
 		ReferenceURL: params.ReferenceURL,
 		Template:     params.Template,
-		UserID:       params.UserID,
+		AccountID:    params.AccountID,
 		Account:      params.Account,
 		Force:        params.Force,
 		Queue:        params.Queue,
