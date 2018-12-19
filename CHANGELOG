@@ -47,5 +47,5 @@
 7.0.0 August, 2018
   - Change `UserID` was deprecated in favor of `AccountID`, this was backwards in the Go lib
 
-7.1.0 December, 2018
-  - Add `States` param for filtering dispute list by multiple states.
+8.0.0 December, 2018
+  - Change `State` param for filtering dispute list to be a list of strings

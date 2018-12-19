@@ -227,7 +227,7 @@ func TestListDisputesFilterState(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.List(&chargehound.ListDisputesParams{
-		State: "needs_response",
+		State: []string{"needs_response"},
 	})
 	if err != nil {
 		t.Error(err)
@@ -271,7 +271,7 @@ func TestListDisputesFilterMultipleStates(t *testing.T) {
 	ch.Protocol = url.Scheme + "://"
 
 	_, err = ch.Disputes.List(&chargehound.ListDisputesParams{
-		States: []string{
+		State: []string{
 			"needs_response",
 			"warning_needs_response",
 		},

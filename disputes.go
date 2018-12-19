@@ -145,8 +145,7 @@ type ListDisputesParams struct {
 	Limit         int
 	StartingAfter string
 	EndingBefore  string
-	State         string
-	States        []string
+	State         []string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
@@ -337,10 +336,8 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 		q.Set("ending_before", params.EndingBefore)
 	}
 
-	if params.State != "" {
-		q.Set("state", params.State)
-	} else if params.States != nil {
-		for _, state := range params.States {
+	if params.State != nil {
+		for _, state := range params.State {
 			q.Add("state", state)
 		}
 	}
