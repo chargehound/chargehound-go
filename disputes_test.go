@@ -190,6 +190,97 @@ func TestListDisputes(t *testing.T) {
 	}
 }
 
+func TestListDisputesFilterState(t *testing.T) {
+	ch := chargehound.New("api_key", nil)
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes" {
+			t.Error("Incorrect path.")
+		}
+
+		if r.URL.RawQuery != "state=needs_response" {
+			t.Error("Incorrect query.")
+		}
+
+		if r.Header.Get("User-Agent") != "Chargehound/v1 GoBindings/"+ch.Version {
+			t.Error("Incorrect version.")
+		}
+
+		if r.Header.Get("Authorization") != "Basic YXBpX2tleTo=" {
+			t.Error("Incorrect authorization.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.List(&chargehound.ListDisputesParams{
+		State: []string{"needs_response"},
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestListDisputesFilterMultipleStates(t *testing.T) {
+	ch := chargehound.New("api_key", nil)
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes" {
+			t.Error("Incorrect path.")
+		}
+
+		if r.URL.RawQuery != "state=needs_response&state=warning_needs_response" {
+			t.Error("Incorrect query.")
+		}
+
+		if r.Header.Get("User-Agent") != "Chargehound/v1 GoBindings/"+ch.Version {
+			t.Error("Incorrect version.")
+		}
+
+		if r.Header.Get("Authorization") != "Basic YXBpX2tleTo=" {
+			t.Error("Incorrect authorization.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.List(&chargehound.ListDisputesParams{
+		State: []string{
+			"needs_response",
+			"warning_needs_response",
+		},
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestUpdateDisputeFields(t *testing.T) {
 	ch := chargehound.New("api_key", nil)
 

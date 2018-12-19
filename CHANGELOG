@@ -46,3 +46,6 @@
 
 7.0.0 August, 2018
   - Change `UserID` was deprecated in favor of `AccountID`, this was backwards in the Go lib
+
+8.0.0 December, 2018
+  - Change `State` param for filtering dispute list to be a list of strings
