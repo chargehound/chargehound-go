@@ -146,6 +146,7 @@ type ListDisputesParams struct {
 	StartingAfter string
 	EndingBefore  string
 	State         string
+	States        []string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
@@ -338,6 +339,10 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 
 	if params.State != "" {
 		q.Set("state", params.State)
+	} else if params.States != nil {
+		for _, state := range params.States {
+			q.Add("state", state)
+		}
 	}
 
 	req, err := newAPIRequestor(
