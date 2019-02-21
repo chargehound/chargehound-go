@@ -49,3 +49,6 @@
 
 8.0.0 December, 2018
   - Change `State` param for filtering dispute list to be a list of strings
+
+8.1.0 December, 2018
+  - Add `ShippingCarrier` and `ShippingTrackingNumber` params to Product.
