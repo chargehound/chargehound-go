@@ -94,13 +94,15 @@ type Dispute struct {
 
 // Dispute product data See https://www.chargehound.com/docs/api/index.html#product-data.
 type Product struct {
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-	Image       string `json:"image,omitempty"`
-	Sku         string `json:"sku,omitempty"`
-	Quantity    int    `json:"quantity,omitempty"`
-	Amount      int    `json:"amount,omitempty"`
-	URL         string `json:"url,omitempty"`
+	Name                   string `json:"name,omitempty"`
+	Description            string `json:"description,omitempty"`
+	Image                  string `json:"image,omitempty"`
+	Sku                    string `json:"sku,omitempty"`
+	Quantity               int    `json:"quantity,omitempty"`
+	Amount                 int    `json:"amount,omitempty"`
+	URL                    string `json:"url,omitempty"`
+	ShippingCarrier        string `json:"shipping_carrier,omitempty"`
+	ShippingTrackingNumber string `json:"shipping_tracking_number,omitempty"`
 }
 
 // The type returned by a list disputes request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-list-of-disputes.
