@@ -42,6 +42,8 @@ type Dispute struct {
 	MissingFields map[string]interface{} `json:"missing_fields"`
 	// A list of products in the disputed order. (See [Product data](#product-data) for details.) (optional)
 	Products []Product `json:"products"`
+	// List of emails to the customer. (optional)
+	Correspondence []Email `json:"correspondence,omitempty"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
 	// Can the charge be refunded.
@@ -105,6 +107,16 @@ type Product struct {
 	ShippingTrackingNumber string `json:"shipping_tracking_number,omitempty"`
 }
 
+// Email for dispute correspondence data
+type Email struct {
+	To      string `json:"to,omitempty"`
+	From    string `json:"from,omitempty"`
+	Sent    string `json:"sent,omitempty"`
+	Subject string `json:"subject,omitempty"`
+	Body    string `json:"body,omitempty"`
+	Caption string `json:"caption,omitempty"`
+}
+
 // The type returned by a list disputes request. See https://www.chargehound.com/docs/api/index.html#retrieving-a-list-of-disputes.
 type DisputeList struct {
 	Data     []Dispute    `json:"data"`
@@ -164,14 +176,15 @@ type UpdateDisputeParams struct {
 	ID        string
 	AccountID string
 	// Id of the connected account for this dispute (if multiple accounts are connected)
-	Account      string
-	Force        bool
-	Queue        bool
-	Template     string
-	Charge       string
-	Fields       map[string]interface{}
-	Products     []Product
-	ReferenceURL string
+	Account        string
+	Force          bool
+	Queue          bool
+	Template       string
+	Charge         string
+	Fields         map[string]interface{}
+	Products       []Product
+	Correspondence []Email
+	ReferenceURL   string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
 }
@@ -223,6 +236,8 @@ type CreateDisputeParams struct {
 	Fields map[string]interface{} `json:"fields,omitempty"`
 	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
+	// List of emails to the customer. (optional)
+	Correspondence []Email `json:"correspondence,omitempty"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
 	// Set the kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'. (optional)
@@ -238,15 +253,16 @@ type CreateDisputeParams struct {
 }
 
 type updateDisputeBody struct {
-	Template     string                 `json:"template,omitempty"`
-	Charge       string                 `json:"charge,omitempty"`
-	Account      string                 `json:"account,omitempty"`
-	AccountID    string                 `json:"account_id,omitempty"`
-	ReferenceURL string                 `json:"reference_url,omitempty"`
-	Force        bool                   `json:"force,omitempty"`
-	Queue        bool                   `json:"queue,omitempty"`
-	Fields       map[string]interface{} `json:"fields,omitempty"`
-	Products     []Product              `json:"products,omitempty"`
+	Template       string                 `json:"template,omitempty"`
+	Charge         string                 `json:"charge,omitempty"`
+	Account        string                 `json:"account,omitempty"`
+	AccountID      string                 `json:"account_id,omitempty"`
+	ReferenceURL   string                 `json:"reference_url,omitempty"`
+	Force          bool                   `json:"force,omitempty"`
+	Queue          bool                   `json:"queue,omitempty"`
+	Fields         map[string]interface{} `json:"fields,omitempty"`
+	Products       []Product              `json:"products,omitempty"`
+	Correspondence []Email                `json:"correspondence,omitempty"`
 }
 
 // Create a dispute
@@ -368,15 +384,16 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 
 func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 	body := updateDisputeBody{
-		Fields:       params.Fields,
-		Products:     params.Products,
-		ReferenceURL: params.ReferenceURL,
-		Template:     params.Template,
-		AccountID:    params.AccountID,
-		Account:      params.Account,
-		Force:        params.Force,
-		Queue:        params.Queue,
-		Charge:       params.Charge,
+		Fields:         params.Fields,
+		Products:       params.Products,
+		Correspondence: params.Correspondence,
+		ReferenceURL:   params.ReferenceURL,
+		Template:       params.Template,
+		AccountID:      params.AccountID,
+		Account:        params.Account,
+		Force:          params.Force,
+		Queue:          params.Queue,
+		Charge:         params.Charge,
 	}
 
 	b := new(bytes.Buffer)
