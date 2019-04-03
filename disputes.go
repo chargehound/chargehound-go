@@ -43,7 +43,7 @@ type Dispute struct {
 	// A list of products in the disputed order. (See [Product data](#product-data) for details.) (optional)
 	Products []Product `json:"products"`
 	// List of emails to the customer. (optional)
-	Correspondence []Email `json:"correspondence,omitempty"`
+	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
 	// Can the charge be refunded.
@@ -107,8 +107,8 @@ type Product struct {
 	ShippingTrackingNumber string `json:"shipping_tracking_number,omitempty"`
 }
 
-// Email for dispute correspondence data
-type Email struct {
+// CorrespondenceItem for dispute correspondence data
+type CorrespondenceItem struct {
 	To      string `json:"to,omitempty"`
 	From    string `json:"from,omitempty"`
 	Sent    string `json:"sent,omitempty"`
@@ -183,7 +183,7 @@ type UpdateDisputeParams struct {
 	Charge         string
 	Fields         map[string]interface{}
 	Products       []Product
-	Correspondence []Email
+	Correspondence []CorrespondenceItem
 	ReferenceURL   string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
@@ -237,7 +237,7 @@ type CreateDisputeParams struct {
 	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
 	// List of emails to the customer. (optional)
-	Correspondence []Email `json:"correspondence,omitempty"`
+	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
 	// Set the kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'. (optional)
@@ -262,7 +262,7 @@ type updateDisputeBody struct {
 	Queue          bool                   `json:"queue,omitempty"`
 	Fields         map[string]interface{} `json:"fields,omitempty"`
 	Products       []Product              `json:"products,omitempty"`
-	Correspondence []Email                `json:"correspondence,omitempty"`
+	Correspondence []CorrespondenceItem   `json:"correspondence,omitempty"`
 }
 
 // Create a dispute

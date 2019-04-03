@@ -450,7 +450,7 @@ func TestUpdateDisputeCorrespondence(t *testing.T) {
 	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
 		ID:             "dp_xxx",
 		Template:       "tmpl_1",
-		Correspondence: []chargehound.Email{{To: "customer@example.com", From: "noreply@example.com"}},
+		Correspondence: []chargehound.CorrespondenceItem{{To: "customer@example.com", From: "noreply@example.com"}},
 	})
 	if err != nil {
 		t.Error(err)
