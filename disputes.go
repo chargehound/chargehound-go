@@ -40,9 +40,10 @@ type Dispute struct {
 	Fields map[string]interface{} `json:"fields"`
 	// Any fields required by the template that have not yet been provided.
 	MissingFields map[string]interface{} `json:"missing_fields"`
-	// A list of products in the disputed order. (See [Product data](#product-data) for details.) (optional)
+	// A list of products in the disputed order. (See [Product data](https://www.chargehound.com/docs/api/index.html#product-data) for details.) (optional)
 	Products []Product `json:"products"`
-	// List of emails to the customer. (optional)
+	// List of emails with the customer.
+	// (See [Customer correspondence](https://www.chargehound.com/docs/api/index.html#customer-correspondence) for details.) (optional)
 	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
@@ -94,7 +95,7 @@ type Dispute struct {
 	Response HTTPResponse `json:"-"`
 }
 
-// Dispute product data See https://www.chargehound.com/docs/api/index.html#product-data.
+// Dispute product data. See https://www.chargehound.com/docs/api/index.html#product-data.
 type Product struct {
 	Name                   string `json:"name,omitempty"`
 	Description            string `json:"description,omitempty"`
@@ -107,7 +108,7 @@ type Product struct {
 	ShippingTrackingNumber string `json:"shipping_tracking_number,omitempty"`
 }
 
-// CorrespondenceItem for dispute correspondence data
+// CorrespondenceItem for dispute correspondence data. See https://www.chargehound.com/docs/api/index.html#customer-correspondence.
 type CorrespondenceItem struct {
 	To      string `json:"to,omitempty"`
 	From    string `json:"from,omitempty"`
@@ -236,7 +237,8 @@ type CreateDisputeParams struct {
 	Fields map[string]interface{} `json:"fields,omitempty"`
 	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
-	// List of emails to the customer. (optional)
+	// List of emails with the customer.
+	// (See [Customer correspondence](https://www.chargehound.com/docs/api/index.html#customer-correspondence) for details.) (optional)
 	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
