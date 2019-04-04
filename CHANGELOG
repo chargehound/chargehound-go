@@ -54,4 +54,4 @@
   - Add `ShippingCarrier` and `ShippingTrackingNumber` params to Product.
 
 8.2.0 April, 2019
-  - Add `Email` model and `correspondence` param.
+  - Add `CorrespondenceItem` model and `correspondence` param.
