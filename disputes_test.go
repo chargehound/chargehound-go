@@ -401,6 +401,62 @@ func TestUpdateDisputeProducts(t *testing.T) {
 	}
 }
 
+func TestUpdateDisputeCorrespondence(t *testing.T) {
+	ch := chargehound.New("api_key", nil)
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "PUT" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["template"] != "tmpl_1" {
+			t.Error("Incorrect template id.")
+		}
+
+		correspondence := b["correspondence"].([]interface{})
+		email := correspondence[0].(map[string]interface{})
+
+		if email["to"] != "customer@example.com" {
+			t.Error("Incorrect to address.")
+		}
+
+		if email["from"] != "noreply@example.com" {
+			t.Error("Incorrect from address.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
+		ID:             "dp_xxx",
+		Template:       "tmpl_1",
+		Correspondence: []chargehound.CorrespondenceItem{{To: "customer@example.com", From: "noreply@example.com"}},
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestUpdateDisputeProductsWithShippingInfo(t *testing.T) {
 	ch := chargehound.New("api_key", nil)
 
