@@ -44,7 +44,7 @@ type Dispute struct {
 	Products []Product `json:"products"`
 	// List of emails with the customer.
 	// (See [Customer correspondence](https://www.chargehound.com/docs/api/index.html#customer-correspondence) for details.) (optional)
-	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
+	Correspondence []CorrespondenceItem `json:"correspondence"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
 	// Can the charge be refunded.
