@@ -521,6 +521,62 @@ func TestUpdateDisputeProductsWithShippingInfo(t *testing.T) {
 	}
 }
 
+func TestUpdateDisputePastPayments(t *testing.T) {
+	ch := chargehound.New("api_key", nil)
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "PUT" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["template"] != "tmpl_1" {
+			t.Error("Incorrect template id.")
+		}
+
+		payments := b["past_payments"].([]interface{})
+		payment1 := payments[0].(map[string]interface{})
+
+		if payment1["id"] != "ch_1" {
+			t.Error("Incorrect payment id.")
+		}
+
+		if payment1["amount"] != 100.0 {
+			t.Error("Incorrect payment amount.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
+		ID:           "dp_xxx",
+		Template:     "tmpl_1",
+		PastPayments: []chargehound.PastPayment{{ID: "ch_1", Amount: 100}},
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestUpdateDisputeUserID(t *testing.T) {
 	ch := chargehound.New("api_key", nil)
 
