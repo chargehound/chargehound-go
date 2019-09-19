@@ -45,6 +45,8 @@ type Dispute struct {
 	// List of emails with the customer.
 	// (See [Customer correspondence](https://www.chargehound.com/docs/api/2017-10-30/#customer-correspondence) for details.) (optional)
 	Correspondence []CorrespondenceItem `json:"correspondence"`
+	// Customer's history of past payments.. (See [Past payments](https://www.chargehound.com/docs/api/2017-10-30/#past-payments) for details.) (optional)
+	PastPayments []PastPayment `json:"past_payments"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
 	// Can the charge be refunded.
@@ -118,6 +120,14 @@ type CorrespondenceItem struct {
 	Caption string `json:"caption,omitempty"`
 }
 
+// PastPayment for customer past payments. See https://www.chargehound.com/docs/api/2017-10-30/#past-payments.
+type PastPayment struct {
+	ID        string `json:"id,omitempty"`
+	Amount    int    `json:"amount,omitempty"`
+	Currency  string `json:"currency,omitempty"`
+	ChargedAt string `json:"charged_at,omitempty"`
+}
+
 // The type returned by a list disputes request. See https://www.chargehound.com/docs/api/2017-10-30/#retrieving-a-list-of-disputes.
 type DisputeList struct {
 	Data     []Dispute    `json:"data"`
@@ -185,6 +195,7 @@ type UpdateDisputeParams struct {
 	Fields         map[string]interface{}
 	Products       []Product
 	Correspondence []CorrespondenceItem
+	PastPayments   []PastPayment
 	ReferenceURL   string
 	// Optional http client for the request. Typically needed when using App Engine.
 	OptHTTPClient *http.Client
@@ -240,6 +251,8 @@ type CreateDisputeParams struct {
 	// List of emails with the customer.
 	// (See [Customer correspondence](https://www.chargehound.com/docs/api/2017-10-30/#customer-correspondence) for details.) (optional)
 	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
+	// Customer's history of past payments.. (See [Past payments](https://www.chargehound.com/docs/api/2017-10-30/#past-payments) for details.) (optional)
+	PastPayments []PastPayment `json:"past_payments"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
 	// Set the kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'. (optional)
@@ -265,6 +278,7 @@ type updateDisputeBody struct {
 	Fields         map[string]interface{} `json:"fields,omitempty"`
 	Products       []Product              `json:"products,omitempty"`
 	Correspondence []CorrespondenceItem   `json:"correspondence,omitempty"`
+	PastPayments   []PastPayment          `json:"past_payments,omitempty"`
 }
 
 // Create a dispute
@@ -389,6 +403,7 @@ func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 		Fields:         params.Fields,
 		Products:       params.Products,
 		Correspondence: params.Correspondence,
+		PastPayments:   params.PastPayments,
 		ReferenceURL:   params.ReferenceURL,
 		Template:       params.Template,
 		AccountID:      params.AccountID,
