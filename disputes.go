@@ -190,6 +190,7 @@ type UpdateDisputeParams struct {
 	Account        string
 	Force          bool
 	Queue          bool
+	Submit         bool
 	Template       string
 	Charge         string
 	Fields         map[string]interface{}
@@ -275,6 +276,7 @@ type updateDisputeBody struct {
 	ReferenceURL   string                 `json:"reference_url,omitempty"`
 	Force          bool                   `json:"force,omitempty"`
 	Queue          bool                   `json:"queue,omitempty"`
+	Submit         bool                   `json:"submit,omitempty"`
 	Fields         map[string]interface{} `json:"fields,omitempty"`
 	Products       []Product              `json:"products,omitempty"`
 	Correspondence []CorrespondenceItem   `json:"correspondence,omitempty"`
@@ -410,6 +412,7 @@ func newUpdateDisputeBody(params *UpdateDisputeParams) (io.Reader, error) {
 		Account:        params.Account,
 		Force:          params.Force,
 		Queue:          params.Queue,
+		Submit:         params.Submit,
 		Charge:         params.Charge,
 	}
 

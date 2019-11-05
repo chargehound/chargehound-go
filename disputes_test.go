@@ -790,6 +790,50 @@ func TestAcceptDispute(t *testing.T) {
 	}
 }
 
+func TestSubmitDisputeWithUpdate(t *testing.T) {
+	ch := chargehound.New("api_key", nil)
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "PUT" {
+			t.Error("Incorrect method.")
+		}
+
+		if r.URL.Path != "/v1/disputes/dp_xxx" {
+			t.Error("Incorrect path.")
+		}
+
+		decoder := json.NewDecoder(r.Body)
+		b := make(map[string]interface{})
+		err := decoder.Decode(&b)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if b["submit"] != true {
+			t.Error("Incorrect submit parameter.")
+		}
+
+		json.NewEncoder(w).Encode(chargehound.Dispute{ID: "dp_xxx"})
+	}))
+	defer ts.Close()
+
+	url, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	ch.Host = url.Host
+	ch.Protocol = url.Scheme + "://"
+
+	_, err = ch.Disputes.Update(&chargehound.UpdateDisputeParams{
+		ID:     "dp_xxx",
+		Submit: true,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestResponseCode(t *testing.T) {
 	ch := chargehound.New("api_key", nil)
 
