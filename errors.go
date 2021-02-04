@@ -16,16 +16,23 @@ const (
 	GenericError        = ErrorType("Error")
 )
 
+// A Chargehound API error
 type Error interface {
+	// The error message
 	Error() string
+	// The HTTP status code
 	StatusCode() int
+	// The Go exception type
 	Type() ErrorType
+	// The error type string from the API
+	ApiErrorType() string
 }
 
 type errorResponse struct {
 	Status    int
 	ErrorType ErrorType
 	Message   string
+	ApiType   string `json:"type"`
 }
 
 type errorJSON struct {
@@ -70,4 +77,8 @@ func (e *errorResponse) StatusCode() int {
 
 func (e *errorResponse) Type() ErrorType {
 	return e.ErrorType
+}
+
+func (e *errorResponse) ApiErrorType() string {
+	return e.ApiType
 }

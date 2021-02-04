@@ -61,3 +61,6 @@
 
 8.3.1 Sept, 2019
   - Add missing `submit` parameter.
+
+8.4.0 Feb, 2021
+  - Add API error types.
