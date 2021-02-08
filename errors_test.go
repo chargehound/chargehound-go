@@ -13,36 +13,49 @@ var errorTests = []struct {
 	error     string
 	code      int
 	errorType chargehound.ErrorType
+	apiType   string
 	message   string
 }{
 	{
 		"{\"error\": { \"status\": 404, \"message\": \"A dispute with id 'puppy' was not found\"}}",
 		404,
 		chargehound.NotFoundError,
+		"",
+		"Not Found: A dispute with id 'puppy' was not found",
+	},
+	{
+		"{\"error\": { \"status\": 404, \"type\": \"dispute_not_found\", \"message\": \"A dispute with id 'puppy' was not found\"}}",
+		404,
+		chargehound.NotFoundError,
+		"dispute_not_found",
 		"Not Found: A dispute with id 'puppy' was not found",
 	},
 	{
 		"{\"error\": { \"status\": 400, \"message\": \"Wrong param\"}}",
 		400,
 		chargehound.BadRequestError,
+		"",
 		"Bad Request: Wrong param",
 	},
 	{
 		"{\"error\": { \"status\": 401, \"message\": \"No user\"}}",
 		401,
 		chargehound.UnauthorizedError,
+		"",
 		"Unauthorized: No user",
 	},
 	{
 		"{\"error\": { \"status\": 403, \"message\": \"Wrong user\"}}",
 		403,
 		chargehound.ForbiddenError,
+		"",
 		"Forbidden: Wrong user",
 	},
 	{
 		"{\"error\": { \"status\": 500, \"message\": \"Server error\"}}",
 		500,
 		chargehound.InternalServerError,
+		"",
 		"Server Error: Server error",
 	},
 }
@@ -54,6 +67,7 @@ func TestErrors(t *testing.T) {
 		error := test.error
 		code := test.code
 		errorType := test.errorType
+		apiType := test.apiType
 		message := test.message
 
 		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +100,10 @@ func TestErrors(t *testing.T) {
 
 		if errorType != chErr.Type() {
 			t.Error("Expected type: ", errorType)
+		}
+
+		if apiType != chErr.ApiErrorType() {
+			t.Error("Expected error type: ", apiType)
 		}
 	}
 }
