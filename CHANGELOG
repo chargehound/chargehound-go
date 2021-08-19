@@ -64,3 +64,7 @@
 
 8.4.0 Feb, 2021
   - Add API error types.
+
+8.5.0 Aug, 2021
+  - Fix int converstion
+  - Add account to model
