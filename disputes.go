@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // Wrapper for the Chargehound API disputes resource.
@@ -363,7 +364,7 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 	// map the query params to a dict
 	q := url.Values{}
 	if params.Limit > 0 {
-		q.Set("limit", string(params.Limit))
+		q.Set("limit", strconv.Itoa(params.Limit))
 	}
 
 	if params.StartingAfter != "" {
