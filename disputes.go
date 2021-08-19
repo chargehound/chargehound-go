@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // Wrapper for the Chargehound API disputes resource.
@@ -81,6 +82,8 @@ type Dispute struct {
 	StatementDescriptor string `json:"statement_descriptor"`
 	// The account id for Connected accounts that are charged directly through Stripe (if any)
 	AccountID string `json:"account_id"`
+	// Id of the connected account for this dispute (if multiple accounts are connected)
+	Account string `json:"account"`
 	// The kind for the dispute, 'chargeback', 'retrieval' or 'pre_arbitration'.
 	Kind string `json:"kind"`
 	// ISO 8601 timestamp.
@@ -363,7 +366,7 @@ func (dp *Disputes) List(params *ListDisputesParams) (*DisputeList, error) {
 	// map the query params to a dict
 	q := url.Values{}
 	if params.Limit > 0 {
-		q.Set("limit", string(params.Limit))
+		q.Set("limit", strconv.Itoa(params.Limit))
 	}
 
 	if params.StartingAfter != "" {
