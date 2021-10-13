@@ -11,10 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ 1.7, 1.9, "1.10", "1.11"]
+        go: [ "1.15", "1.16", "1.17"]
     name: Test Go ${{ matrix.go }}
     steps:
       - uses: actions/checkout@v2
+       with:
+          fetch-depth: 1
+          path: ${{ env.GOPATH }}/src/myproject
       - name: Set up Go ${{ matrix.go }}
         uses: actions/setup-go@v2
         with:
