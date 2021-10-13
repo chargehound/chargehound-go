@@ -15,9 +15,6 @@ jobs:
     name: Test Go ${{ matrix.go }}
     steps:
       - uses: actions/checkout@v2
-       with:
-          fetch-depth: 1
-          path: ${{ env.GOPATH }}/src/myproject
       - name: Set up Go ${{ matrix.go }}
         uses: actions/setup-go@v2
         with:
