@@ -19,5 +19,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
-      - run: |
-          go test ./...
+      - name: Build
+        run: go build -v ./...
+      - name: Test
+        run: go test -v ./...
