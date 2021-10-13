@@ -1,5 +1,5 @@
 # Chargehound Go bindings 
-[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/chargehound/chargehound-go) [![Build Status](https://travis-ci.org/chargehound/chargehound-go.svg?branch=master)](https://travis-ci.org/chargehound/chargehound-go)
+[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/chargehound/chargehound-go) [![Build Status](https://github.com/chargehound/chargehound-go/actions/workflows/go.yaml/badge.svg)](https://github.com/chargehound/chargehound-go/actions/workflows/go.yaml)
 
 ## Installation
 
