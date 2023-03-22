@@ -11,7 +11,7 @@ const (
 	basepath   = "/v1/"
 	host       = "api.chargehound.com"
 	protocol   = "https://"
-	version    = "8.5.0"
+	version    = "8.6.0"
 
 	defaultHTTPTimeout = 60 * time.Second
 )

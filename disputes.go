@@ -15,7 +15,7 @@ type Disputes struct {
 	client *Client
 }
 
-// A dispute. See https://www.chargehound.com/docs/api/2017-10-30/#disputes.
+// A dispute. See https://www.chargehound.com/docs/api/2021-09-15/#disputes.
 type Dispute struct {
 	// A unique identifier for the dispute. This id is set by the payment processor of the dispute.
 	ID string `json:"id"`
@@ -41,12 +41,12 @@ type Dispute struct {
 	Fields map[string]interface{} `json:"fields"`
 	// Any fields required by the template that have not yet been provided.
 	MissingFields map[string]interface{} `json:"missing_fields"`
-	// A list of products in the disputed order. (See [Product data](https://www.chargehound.com/docs/api/2017-10-30/#product-data) for details.) (optional)
+	// A list of products in the disputed order. (See [Product data](https://www.chargehound.com/docs/api/2021-09-15/#product-data) for details.) (optional)
 	Products []Product `json:"products"`
 	// List of emails with the customer.
-	// (See [Customer correspondence](https://www.chargehound.com/docs/api/2017-10-30/#customer-correspondence) for details.) (optional)
+	// (See [Customer correspondence](https://www.chargehound.com/docs/api/2021-09-15/#customer-correspondence) for details.) (optional)
 	Correspondence []CorrespondenceItem `json:"correspondence"`
-	// Customer's history of past payments.. (See [Past payments](https://www.chargehound.com/docs/api/2017-10-30/#past-payments) for details.) (optional)
+	// Customer's history of past payments.. (See [Past payments](https://www.chargehound.com/docs/api/2021-09-15/#past-payments) for details.) (optional)
 	PastPayments []PastPayment `json:"past_payments"`
 	// Id of the disputed charge.
 	Charge string `json:"charge"`
@@ -100,7 +100,7 @@ type Dispute struct {
 	Response HTTPResponse `json:"-"`
 }
 
-// Dispute product data. See https://www.chargehound.com/docs/api/2017-10-30/#product-data.
+// Dispute product data. See https://www.chargehound.com/docs/api/2021-09-15/#product-data.
 type Product struct {
 	Name                   string `json:"name,omitempty"`
 	Description            string `json:"description,omitempty"`
@@ -113,7 +113,7 @@ type Product struct {
 	ShippingTrackingNumber string `json:"shipping_tracking_number,omitempty"`
 }
 
-// CorrespondenceItem for dispute correspondence data. See https://www.chargehound.com/docs/api/2017-10-30/#customer-correspondence.
+// CorrespondenceItem for dispute correspondence data. See https://www.chargehound.com/docs/api/2021-09-15/#customer-correspondence.
 type CorrespondenceItem struct {
 	To      string `json:"to,omitempty"`
 	From    string `json:"from,omitempty"`
@@ -123,15 +123,19 @@ type CorrespondenceItem struct {
 	Caption string `json:"caption,omitempty"`
 }
 
-// PastPayment for customer past payments. See https://www.chargehound.com/docs/api/2017-10-30/#past-payments.
+// PastPayment for customer past payments. See https://www.chargehound.com/docs/api/2021-09-15/#past-payments.
 type PastPayment struct {
-	ID        string `json:"id,omitempty"`
-	Amount    int    `json:"amount,omitempty"`
-	Currency  string `json:"currency,omitempty"`
-	ChargedAt string `json:"charged_at,omitempty"`
+	ID              string `json:"id,omitempty"`
+	Amount          int    `json:"amount,omitempty"`
+	Currency        string `json:"currency,omitempty"`
+	ChargedAt       string `json:"charged_at,omitempty"`
+	UserId          string `json:"user_id,omitempty"`
+	IPAddress       string `json:"ip_address,omitempty"`
+	ShippingAddress string `json:"shipping_address,omitempty"`
+	DeviceId        string `json:"device_id,omitempty"`
 }
 
-// The type returned by a list disputes request. See https://www.chargehound.com/docs/api/2017-10-30/#retrieving-a-list-of-disputes.
+// The type returned by a list disputes request. See https://www.chargehound.com/docs/api/2021-09-15/#retrieving-a-list-of-disputes.
 type DisputeList struct {
 	Data     []Dispute    `json:"data"`
 	HasMore  bool         `json:"has_more"`
@@ -152,7 +156,7 @@ type Response struct {
 	Response       HTTPResponse           `json:"-"`
 }
 
-// Params for a retrieve dispute request. See https://www.chargehound.com/docs/api/2017-10-30/#retrieving-a-dispute.
+// Params for a retrieve dispute request. See https://www.chargehound.com/docs/api/2021-09-15/#retrieving-a-dispute.
 type RetrieveDisputeParams struct {
 	// The dispute id.
 	ID string
@@ -168,7 +172,7 @@ type AcceptDisputeParams struct {
 	OptHTTPClient *http.Client
 }
 
-// Params for a list disputes request. See https://www.chargehound.com/docs/api/2017-10-30/#retrieving-a-list-of-disputes.
+// Params for a list disputes request. See https://www.chargehound.com/docs/api/2021-09-15/#retrieving-a-list-of-disputes.
 type ListDisputesParams struct {
 	Limit         int
 	StartingAfter string
@@ -184,7 +188,7 @@ type HTTPResponse struct {
 	Status int
 }
 
-// Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/2017-10-30/#updating-a-dispute.
+// Params for updating or submitting a dispute. See https://www.chargehound.com/docs/api/2021-09-15/#updating-a-dispute.
 type UpdateDisputeParams struct {
 	// The dispute id.
 	ID        string
@@ -253,9 +257,9 @@ type CreateDisputeParams struct {
 	// List of products the customer purchased. (optional)
 	Products []Product `json:"products,omitempty"`
 	// List of emails with the customer.
-	// (See [Customer correspondence](https://www.chargehound.com/docs/api/2017-10-30/#customer-correspondence) for details.) (optional)
+	// (See [Customer correspondence](https://www.chargehound.com/docs/api/2021-09-15/#customer-correspondence) for details.) (optional)
 	Correspondence []CorrespondenceItem `json:"correspondence,omitempty"`
-	// Customer's history of past payments.. (See [Past payments](https://www.chargehound.com/docs/api/2017-10-30/#past-payments) for details.) (optional)
+	// Customer's history of past payments.. (See [Past payments](https://www.chargehound.com/docs/api/2021-09-15/#past-payments) for details.) (optional)
 	PastPayments []PastPayment `json:"past_payments"`
 	// Set the account id for Connected accounts that are charged directly through Stripe. (optional)
 	AccountID string `json:"account_id,omitempty"`
