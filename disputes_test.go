@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/chargehound/chargehound-go"
+	"github.com/chargehound/chargehound-go/v8"
 )
 
 func TestRetrieveDispute(t *testing.T) {
