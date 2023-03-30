@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/chargehound/chargehound-go/v2"
+	"github.com/chargehound/chargehound-go"
 )
 
 var errorTests = []struct {
