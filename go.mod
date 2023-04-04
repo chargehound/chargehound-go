@@ -1,3 +1,3 @@
-module github.com/chargehound/chargehound-go/v8
+module github.com/chargehound/chargehound-go
 
 go 1.16
