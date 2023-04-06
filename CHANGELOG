@@ -69,5 +69,5 @@
   - Fix int converstion
   - Add account to model
 
-8.6.0 Mar, 2023
+8.6.1 Mar, 2023
   - Added additional fields to `PastPayment` model
