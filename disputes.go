@@ -125,14 +125,15 @@ type CorrespondenceItem struct {
 
 // PastPayment for customer past payments. See https://www.chargehound.com/docs/api/2021-09-15/#past-payments.
 type PastPayment struct {
-	ID              string `json:"id,omitempty"`
-	Amount          int    `json:"amount,omitempty"`
-	Currency        string `json:"currency,omitempty"`
-	ChargedAt       string `json:"charged_at,omitempty"`
-	UserId          string `json:"user_id,omitempty"`
-	IPAddress       string `json:"ip_address,omitempty"`
-	ShippingAddress string `json:"shipping_address,omitempty"`
-	DeviceId        string `json:"device_id,omitempty"`
+	ID              string      `json:"id,omitempty"`
+	Amount          int         `json:"amount,omitempty"`
+	Currency        string      `json:"currency,omitempty"`
+	ChargedAt       interface{} `json:"charged_at,omitempty"`
+	UserId          string      `json:"user_id,omitempty"`
+	ItemDescription string      `json:"item_description,omitempty"`
+	IPAddress       string      `json:"ip_address,omitempty"`
+	ShippingAddress string      `json:"shipping_address,omitempty"`
+	DeviceId        string      `json:"device_id,omitempty"`
 }
 
 // The type returned by a list disputes request. See https://www.chargehound.com/docs/api/2021-09-15/#retrieving-a-list-of-disputes.
