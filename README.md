@@ -5,7 +5,7 @@
 
 `go get github.com/chargehound/chargehound-go`
 
-This library currently requires go >= 1.6.
+This library currently requires go >= 1.17.
 
 ## Usage
 
