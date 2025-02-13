@@ -25,4 +25,3 @@ jobs:
     with:
       build-mode: 'manual'
       build-command: 'go build ./...'
-
