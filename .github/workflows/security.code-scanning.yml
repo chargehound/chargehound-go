@@ -23,4 +23,5 @@ jobs:
   codeql-go:
     uses: chargehound/security-workflows-public/.github/workflows/codeql-go.yml@main
     with:
+      build-mode: 'manual'
       build-command: 'go build ./...'
