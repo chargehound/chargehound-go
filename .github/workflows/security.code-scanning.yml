@@ -22,4 +22,6 @@ jobs:
     with:
       build-mode: 'manual'
       build-command: 'go build ./...'
+    secrets:
+      DATADOG_API_KEY: ${{ secrets.DATADOG_PAYPAL_QA_TOKEN }}          
       
